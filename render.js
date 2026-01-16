@@ -1,4 +1,5 @@
-import characterData from './data.js';
+// Dynamic cache busting for data.js
+const characterData = await import(`./data.js?v=${Date.now()}`).then(m => m.default);
 
 // Define max levels for jobs that aren't 100
 const MAX_LEVELS = {
