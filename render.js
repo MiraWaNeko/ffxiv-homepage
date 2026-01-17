@@ -119,7 +119,7 @@ function renderJobBadge(jobAbbr, level, maxLevel) {
 }
 
 function renderCharacterCard(character, index) {
-  const { name, world, image, jobs } = character;
+  const { id, name, world, image, jobs } = character;
   const shouldReverse = index % 2 === 1;
 
   // Combine all jobs into one array for lookup
@@ -213,9 +213,9 @@ function renderCharacterCard(character, index) {
 
   // Build HTML based on image position
   const imageHTML = `
-    <div class="character-image">
+    <a href="https://na.finalfantasyxiv.com/lodestone/character/${id}/" target="_blank" rel="noopener" class="character-image">
       <img src="${image}" alt="${name}">
-    </div>
+    </a>
   `;
 
   const infoHTML = `
