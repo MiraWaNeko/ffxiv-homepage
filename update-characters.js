@@ -229,6 +229,42 @@ function getJobEquivalent(className) {
   return classToJob[className] || className;
 }
 
+async function fetchAchievementPoints(characterId) {
+  const url = `https://lalachievements.com/api/charcache/${characterId}`;
+
+  try {
+    console.log(`Fetching achievement data for character ${characterId}...`);
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.scores && Array.isArray(data.scores)) {
+      const achievementScore = data.scores.find(score => score.type === 'achievements');
+
+      if (achievementScore) {
+        return {
+          allScore: achievementScore.allScore || 0,
+          baseScore: achievementScore.baseScore || 0
+        };
+      }
+    }
+
+    console.log(`No achievement data found for character ${characterId}`);
+    return null;
+  } catch (error) {
+    console.error(`Error fetching achievements for character ${characterId}:`, error);
+    return null;
+  }
+}
+
 async function updateAllCharacters() {
   console.log('Fetching character data from Lodestone...');
 
@@ -237,11 +273,13 @@ async function updateAllCharacters() {
   for (const char of CHARACTERS) {
     console.log(`Fetching data for ${char.name} (${char.world})...`);
     const jobs = await fetchCharacterJobs(char.id);
+    const achievements = await fetchAchievementPoints(char.id);
 
     if (jobs) {
       updatedCharacters.push({
         ...char,
         jobs,
+        achievements,
         lastUpdated: new Date().toISOString()
       });
     }

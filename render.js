@@ -119,7 +119,7 @@ function renderJobBadge(jobAbbr, level, maxLevel) {
 }
 
 function renderCharacterCard(character, index) {
-  const { id, name, world, image, jobs } = character;
+  const { id, name, world, image, jobs, achievements } = character;
   const shouldReverse = index % 2 === 1;
 
   // Combine all jobs into one array for lookup
@@ -218,6 +218,24 @@ function renderCharacterCard(character, index) {
     </a>
   `;
 
+  // Build achievements HTML for top right corner
+  let achievementsHTML = '';
+  if (achievements && achievements.allScore) {
+    achievementsHTML = `
+      <div class="achievement-badge">
+        <div class="achievement-total">${achievements.allScore.toLocaleString()}</div>
+        <div class="achievement-hover">
+          <div class="achievement-label">Total Points</div>
+          <div class="achievement-value">${achievements.allScore.toLocaleString()}</div>
+          <div class="achievement-desc">All achievement points earned</div>
+          <div class="achievement-label obtainable">Obtainable Points</div>
+          <div class="achievement-value obtainable">${achievements.baseScore.toLocaleString()}</div>
+          <div class="achievement-desc">Points from non-time-limited achievements</div>
+        </div>
+      </div>
+    `;
+  }
+
   const infoHTML = `
     <div class="character-info">
       <h2 class="character-name">${name}</h2>
@@ -230,6 +248,7 @@ function renderCharacterCard(character, index) {
 
   return `
     <div class="character-card${shouldReverse ? ' reverse' : ''}">
+      ${achievementsHTML}
       ${imageHTML}
       ${infoHTML}
     </div>
