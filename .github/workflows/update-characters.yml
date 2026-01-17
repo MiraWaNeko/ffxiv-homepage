@@ -6,6 +6,9 @@ on:
     - cron: '0 */6 * * *'
   workflow_dispatch: # Allows manual triggering
 
+permissions:
+  contents: write
+
 jobs:
   update-characters:
     runs-on: ubuntu-latest
