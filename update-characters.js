@@ -252,7 +252,9 @@ async function fetchAchievementPoints(characterId) {
       if (achievementScore) {
         return {
           allScore: achievementScore.allScore || 0,
-          baseScore: achievementScore.baseScore || 0
+          baseScore: achievementScore.baseScore || 0,
+          allDate: achievementScore.allDate || null,
+          baseDate: achievementScore.baseDate || null
         };
       }
     }

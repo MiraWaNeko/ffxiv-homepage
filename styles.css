@@ -303,6 +303,27 @@ header h1::after {
     font-weight: 400;
 }
 
+.achievement-hover .achievement-updated {
+    font-size: 0.6rem;
+    color: #6b5d4a;
+    font-style: italic;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(201, 169, 97, 0.2);
+    opacity: 0.8;
+}
+
+.last-updated {
+    text-align: center;
+    font-size: 0.7rem;
+    color: #6b5d4a;
+    font-style: italic;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(201, 169, 97, 0.1);
+    opacity: 0.7;
+}
+
 .job-categories {
     text-align: left;
     margin-top: 20px;
@@ -521,6 +542,33 @@ footer {
     font-size: 0.9rem;
 }
 
+footer p {
+    margin-bottom: 8px;
+}
+
+footer .trademark {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+footer .attribution {
+    margin-top: 20px;
+    font-size: 0.8rem;
+}
+
+footer a {
+    color: #c9a961;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #f4e4bc;
+    text-decoration: underline;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .character-image {
@@ -640,5 +688,17 @@ footer {
 
     .achievement-hover .achievement-desc {
         font-size: 0.6rem;
+    }
+
+    .achievement-hover .achievement-updated {
+        font-size: 0.55rem;
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+
+    .last-updated {
+        font-size: 0.65rem;
+        margin-top: 20px;
+        padding-top: 12px;
     }
 }

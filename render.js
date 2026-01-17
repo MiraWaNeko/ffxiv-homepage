@@ -119,8 +119,19 @@ function renderJobBadge(jobAbbr, level, maxLevel) {
 }
 
 function renderCharacterCard(character, index) {
-  const { id, name, world, image, jobs, achievements } = character;
+  const { id, name, world, image, jobs, achievements, lastUpdated } = character;
   const shouldReverse = index % 2 === 1;
+
+  // Format last updated date and time in viewer's timezone
+  const lastUpdateDate = new Date(lastUpdated);
+  const formattedDate = lastUpdateDate.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
 
   // Combine all jobs into one array for lookup
   const allJobs = [...jobs.combat, ...jobs.crafters, ...jobs.gatherers, ...(jobs.phantom || [])];
@@ -221,6 +232,20 @@ function renderCharacterCard(character, index) {
   // Build achievements HTML for top right corner
   let achievementsHTML = '';
   if (achievements && achievements.allScore) {
+    // Format achievement update time if available
+    let achievementUpdateTime = '';
+    if (achievements.allDate) {
+      const achievementDate = new Date(achievements.allDate);
+      achievementUpdateTime = achievementDate.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
+
     achievementsHTML = `
       <div class="achievement-badge">
         <div class="achievement-total">${achievements.allScore.toLocaleString()}</div>
@@ -231,6 +256,7 @@ function renderCharacterCard(character, index) {
           <div class="achievement-label obtainable">Obtainable Points</div>
           <div class="achievement-value obtainable">${achievements.baseScore.toLocaleString()}</div>
           <div class="achievement-desc">Points from non-time-limited achievements</div>
+          ${achievementUpdateTime ? `<div class="achievement-updated">Updated: ${achievementUpdateTime}</div>` : ''}
         </div>
       </div>
     `;
@@ -243,6 +269,7 @@ function renderCharacterCard(character, index) {
       <div class="job-categories">
         ${jobCategoriesHTML}
       </div>
+      <div class="last-updated">Last updated: ${formattedDate}</div>
     </div>
   `;
 
