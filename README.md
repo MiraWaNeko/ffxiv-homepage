@@ -5,6 +5,7 @@ An automatically-updating portfolio page showcasing your FFXIV characters with j
 ## Features
 
 - **Automatic Lodestone Sync**: Fetches character data directly from FFXIV Lodestone
+- **Achievement Points Tracking**: Displays total achievement points from the Lodestone
 - **Complete Job Coverage**: All combat jobs, crafters, gatherers, and Phantom Jobs
 - **Phantom Jobs Support**: Full support for all 15 Island Sanctuary Phantom Jobs
 - **FFXIV-themed Design**: Elegant dark fantasy aesthetic with gold accents matching the game's UI
@@ -12,6 +13,10 @@ An automatically-updating portfolio page showcasing your FFXIV characters with j
 - **Role-based Job Display**: Shows all jobs organized by role (Tanks, Healers, DPS, Crafters, Gatherers, Phantom Jobs)
 - **Visual Level Indicators**: Separated badge design with golden highlights for max-level jobs
 - **Correct Max Levels**: Recognizes custom max levels (Blue Mage: 80, Phantom Jobs: 3-16)
+- **Lodestone Profile Links**: Character cards link directly to the character's Lodestone profile page
+- **Alternating Card Layouts**: Character cards automatically alternate layout for visual variety
+- **Last Updated Timestamps**: Shows when character data was last refreshed
+- **Dynamic Cache Busting**: Automatic cache invalidation ensures users see the latest updates
 - **Social Media Links**: Display your FFXIV-related Twitter and Bluesky profiles
 
 ## Setup
@@ -48,6 +53,10 @@ const CHARACTERS = [
 - Find the image URL ending with `fl0.jpg` (this is the full-body image)
 - Copy the complete URL including the query parameter
 
+**Optional: Adding a Custom Favicon:**
+- Place a `favicon.svg` file in the root directory to customize your site's icon
+- The file should be an SVG format for best compatibility
+
 ### 3. Update Social Media Links
 
 Edit `index.html` and update the social media links:
@@ -76,7 +85,9 @@ This will automatically fetch:
 - All 8 crafting classes
 - All 3 gathering classes
 - All 15 Phantom Jobs with their levels
+- Achievement points
 - Correct level information for each job
+- Current timestamp for last updated tracking
 
 The parser automatically categorizes jobs and includes all jobs regardless of level (unleveled jobs show as level 0).
 
@@ -187,23 +198,27 @@ const MAX_LEVELS = {
 
 ## Files Overview
 
-- `index.html` - Main HTML page structure
+- `index.html` - Main HTML page structure with dynamic cache busting
 - `styles.css` - FFXIV-themed styling
 - `data.js` - Character data (auto-generated from Lodestone)
-- `render.js` - Dynamic rendering of character cards with job role categorization
-- `update-characters.js` - Lodestone parser that fetches character data
+- `render.js` - Dynamic rendering of character cards with job role categorization, achievements, and timestamps
+- `update-characters.js` - Lodestone parser that fetches character data and achievement points
 - `package.json` - Node.js dependencies
+- `favicon.svg` - (Optional) Custom favicon for your site
 - `.github/workflows/update-characters.yml` - GitHub Actions workflow for automatic updates
 
 ## How It Works
 
 1. **Data Fetching**: `update-characters.js` scrapes your character's Lodestone page using Cheerio
-2. **Job Parsing**:
+2. **Achievement Fetching**: Extracts achievement points from the Lodestone character profile
+3. **Job Parsing**:
    - Regular jobs use standard Lodestone selectors
    - Phantom Jobs use special `character__support_job` selectors
-3. **Data Generation**: Creates `data.js` with structured character and job data
-4. **Rendering**: `render.js` reads `data.js` and dynamically generates the HTML for each character
-5. **Job Display**: Jobs are organized by role and displayed with appropriate styling based on level
+4. **Data Generation**: Creates `data.js` with structured character data including jobs, achievements, and timestamps
+5. **Cache Busting**: `index.html` appends timestamps to CSS/JS file loads to ensure fresh updates
+6. **Rendering**: `render.js` reads `data.js` and dynamically generates the HTML for each character
+7. **Job Display**: Jobs are organized by role and displayed with appropriate styling based on level
+8. **Card Layout**: Character cards automatically alternate layout (reverse class) for visual variety
 
 ## Troubleshooting
 
@@ -219,6 +234,13 @@ const MAX_LEVELS = {
 1. Ensure you've completed Island Sanctuary content to unlock Phantom Jobs
 2. Run `node update-characters.js` locally to verify parsing
 3. Check that the Lodestone page shows your Phantom Jobs
+
+### Achievement points not displaying
+
+1. Verify your character profile on Lodestone shows achievement points
+2. Run `node update-characters.js` locally to test the scraper
+3. Check the browser console for any JavaScript errors
+4. Achievement points must be publicly visible on your Lodestone profile
 
 ### Styling issues
 
@@ -238,7 +260,7 @@ This project is open source and available under the MIT License.
 
 ## Credits
 
-- Character data sourced from [FFXIV Lodestone](https://na.finalfantasyxiv.com/lodestone/)
+- All character and achievement data sourced from [FFXIV Lodestone](https://na.finalfantasyxiv.com/lodestone/)
 - FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.
 
 ## Support

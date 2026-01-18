@@ -232,19 +232,13 @@ function renderCharacterCard(character, index) {
   // Build achievements HTML for top right corner
   let achievementsHTML = '';
   if (achievements && achievements.allScore) {
-    // Format achievement update time if available
-    let achievementUpdateTime = '';
-    if (achievements.allDate) {
-      const achievementDate = new Date(achievements.allDate);
-      achievementUpdateTime = achievementDate.toLocaleString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
-      });
-    }
+    const baseScoreHTML = achievements.baseScore
+      ? `
+          <div class="achievement-label obtainable">Obtainable Points</div>
+          <div class="achievement-value obtainable">${achievements.baseScore.toLocaleString()}</div>
+          <div class="achievement-desc">Points from non-time-limited achievements</div>
+        `
+      : '';
 
     achievementsHTML = `
       <div class="achievement-badge">
@@ -253,10 +247,7 @@ function renderCharacterCard(character, index) {
           <div class="achievement-label">Total Points</div>
           <div class="achievement-value">${achievements.allScore.toLocaleString()}</div>
           <div class="achievement-desc">All achievement points earned</div>
-          <div class="achievement-label obtainable">Obtainable Points</div>
-          <div class="achievement-value obtainable">${achievements.baseScore.toLocaleString()}</div>
-          <div class="achievement-desc">Points from non-time-limited achievements</div>
-          ${achievementUpdateTime ? `<div class="achievement-updated">Updated: ${achievementUpdateTime}</div>` : ''}
+          ${baseScoreHTML}
         </div>
       </div>
     `;
