@@ -30,6 +30,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Restore cache from previous deployment
+        continue-on-error: true
+        run: |
+          git fetch origin gh-pages:gh-pages || true
+          git checkout gh-pages -- achievements-cache.json || true
+
       - name: Fetch character data
         run: pnpm run update
 
