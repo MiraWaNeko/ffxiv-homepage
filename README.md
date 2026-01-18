@@ -28,19 +28,32 @@ git clone https://github.com/MiraWaNeko/ffxiv-homepage
 cd ffxiv-homepage
 ```
 
-### 2. Configure Your Characters
+### 2. Configure Your Site (config.js)
 
-Edit `update-characters.js` and update the `CHARACTERS` array with your character information:
+**This is the main file you need to edit!** All customization is centralized in `config.js`.
+
+Edit `config.js` and update the following:
+
+#### Site Information
+```javascript
+site: {
+  title: 'Your Name - FFXIV Characters',
+  header: 'FFXIV Characters',
+}
+```
+
+#### Character Information
+Add your FFXIV characters to the `characters` array:
 
 ```javascript
-const CHARACTERS = [
+characters: [
   {
     id: 'YOUR_CHARACTER_ID',
     name: 'Character Name',
     world: 'Server Name [Data Center]',
     image: 'FULL_CHARACTER_IMAGE_URL'
   }
-];
+]
 ```
 
 **Finding Your Character ID:**
@@ -49,35 +62,57 @@ const CHARACTERS = [
 
 **Getting the Full Character Image:**
 - Visit your character's Lodestone page
-- Right-click on the character portrait and select "Inspect"
-- Find the image URL ending with `fl0.jpg` (this is the full-body image)
-- Copy the complete URL including the query parameter
+- Right-click on the character portrait and select "Copy Image Address"
+- Paste the full URL (it should end with `fl0.jpg?...`)
+
+#### Lodestone Region
+```javascript
+lodestone: {
+  region: 'na', // Options: 'na', 'eu', 'jp', 'fr', 'de'
+}
+```
+
+#### Social Media Links (Optional)
+```javascript
+socialLinks: [
+  {
+    platform: 'twitter',
+    url: 'https://twitter.com/your-username',
+    label: 'Twitter'
+  },
+  {
+    platform: 'bluesky',
+    url: 'https://bsky.app/profile/your-handle.bsky.social',
+    label: 'Bluesky'
+  }
+]
+```
+
+Set to `null` or `[]` if you don't want social links displayed.
+
+#### GitHub Pages Settings
+```javascript
+deployment: {
+  customDomain: 'your-domain.com', // Or null if not using a custom domain
+}
+```
 
 **Optional: Adding a Custom Favicon:**
 - Place a `favicon.svg` file in the root directory to customize your site's icon
 - The file should be an SVG format for best compatibility
 
-### 3. Update Social Media Links
-
-Edit `index.html` and update the social media links:
-
-```html
-<a href="https://twitter.com/your-username" ...>
-<a href="https://bsky.app/profile/your-handle.bsky.social" ...>
-```
-
-### 4. Install Dependencies
+### 3. Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-### 5. Fetch Character Data
+### 4. Fetch Character Data
 
 Run the Lodestone parser to fetch your character data:
 
 ```bash
-node update-characters.js
+pnpm run update
 ```
 
 This will automatically fetch:
@@ -91,11 +126,11 @@ This will automatically fetch:
 
 The parser automatically categorizes jobs and includes all jobs regardless of level (unleveled jobs show as level 0).
 
-### 6. Test Locally
+### 5. Test Locally
 
-Open `index.html` in your browser to see the results.
+Open `index.html` in your browser to see the results. You may need to use a local server (e.g., `npx http-server`) for ES6 modules to work properly.
 
-### 7. Deploy to GitHub Pages
+### 6. Deploy to GitHub Pages
 
 1. Push your changes to GitHub:
    ```bash
@@ -122,9 +157,11 @@ Open `index.html` in your browser to see the results.
    - Select "Read and write permissions"
    - Click "Save"
 
-### 8. Automatic Updates
+### 7. Automatic Updates
 
-Your character data will automatically update every 6 hours via GitHub Actions. The workflow fetches fresh data from the Lodestone and commits the updated `data.js` file.
+Your character data will automatically update every 6 hours via GitHub Actions. The workflow fetches fresh data from the Lodestone and deploys the updated site to GitHub Pages.
+
+To change the update frequency, edit the cron expression in `.github/workflows/update-characters.yml`.
 
 ## Job Badge Design
 
@@ -153,20 +190,33 @@ Phantom jobs are displayed without the "Phantom " prefix (e.g., "Knight" instead
 
 ## Customization
 
+### Main Configuration (config.js)
+
+Most customization is done in `config.js`:
+
+- **Site title and header**: Edit `site.title` and `site.header`
+- **Characters**: Add/remove/edit characters in the `characters` array
+- **Social links**: Modify the `socialLinks` array
+- **Lodestone region**: Change `lodestone.region` to your region
+- **Custom domain**: Set `deployment.customDomain` for GitHub Pages
+
 ### Update Frequency
 
-To change how often the data updates, edit `.github/workflows/update-characters.yml`:
+To change how often character data updates, edit the cron expression in `.github/workflows/update-characters.yml`:
 
 ```yaml
-schedule:
-  - cron: '0 */6 * * *'  # Every 6 hours
+on:
+  schedule:
+    - cron: '0 */12 * * *'  # Change this line
 ```
 
-Cron schedule examples:
-- `0 */6 * * *` - Every 6 hours
+Common cron schedule examples:
+- `0 */6 * * *` - Every 6 hours (default)
 - `0 */12 * * *` - Every 12 hours
-- `0 0 * * *` - Once per day at midnight
-- `0 0,12 * * *` - Twice per day (midnight and noon)
+- `0 0 * * *` - Once per day at midnight UTC
+- `0 0,12 * * *` - Twice per day (midnight and noon UTC)
+
+See [crontab.guru](https://crontab.guru/) for help with cron expressions.
 
 ### Styling
 
@@ -176,13 +226,6 @@ Edit `styles.css` to customize:
 - Card designs
 - Typography
 - Job badge appearance
-
-### Page Title and Header
-
-Edit `index.html` to change:
-- Page title: `<title>Your Title</title>`
-- Main header: `<h1>Your Header</h1>`
-- Footer text
 
 ### Max Levels
 
@@ -198,11 +241,13 @@ const MAX_LEVELS = {
 
 ## Files Overview
 
+- **`config.js`** - **Main configuration file** (characters, site info, social links, deployment settings)
 - `index.html` - Main HTML page structure with dynamic cache busting
 - `styles.css` - FFXIV-themed styling
 - `data.js` - Character data (auto-generated from Lodestone)
 - `render.js` - Dynamic rendering of character cards with job role categorization, achievements, and timestamps
 - `update-characters.js` - Lodestone parser that fetches character data and achievement points
+- `fetch-achievements.js` - Achievement fetching and caching system
 - `package.json` - Node.js dependencies
 - `favicon.svg` - (Optional) Custom favicon for your site
 - `.github/workflows/update-characters.yml` - GitHub Actions workflow for automatic updates
@@ -225,9 +270,10 @@ const MAX_LEVELS = {
 ### Characters not updating
 
 1. Check the Actions tab for any failed workflows
-2. Verify your character IDs are correct in `update-characters.js`
+2. Verify your character IDs are correct in `config.js`
 3. Make sure GitHub Actions has write permissions
 4. Check if the Lodestone is accessible (not under maintenance)
+5. Ensure `config.js` is included in the deployment (check workflow file)
 
 ### Phantom Jobs not showing
 

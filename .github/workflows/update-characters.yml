@@ -2,7 +2,12 @@ name: Update FFXIV Character Data
 
 on:
   schedule:
-    # Runs every 6 hours
+    # Runs every 6 hours (at minute 0 of every 6th hour)
+    # To change frequency, edit this cron expression:
+    #   '0 */12 * * *' = Every 12 hours
+    #   '0 0 * * *'    = Once per day at midnight UTC
+    #   '0 0,12 * * *' = Twice per day (midnight and noon UTC)
+    # See https://crontab.guru/ for help with cron expressions
     - cron: '0 */6 * * *'
   workflow_dispatch: # Allows manual triggering
 
@@ -43,6 +48,7 @@ jobs:
         run: |
           mkdir -p deploy
           cp index.html deploy/
+          cp config.js deploy/
           cp render.js deploy/
           cp styles.css deploy/
           cp favicon.svg deploy/
@@ -50,7 +56,19 @@ jobs:
           cp achievements-cache.json deploy/
           cp achievements.json deploy/
           cp time-limited-achievements.json deploy/
-          echo "ffxiv.mirawaneko.net" > deploy/CNAME
+
+      - name: Create CNAME file from config
+        run: |
+          node --input-type=module -e "
+          import CONFIG from './config.js';
+          import { writeFileSync } from 'fs';
+          if (CONFIG.deployment.customDomain) {
+            writeFileSync('deploy/CNAME', CONFIG.deployment.customDomain);
+            console.log('Created CNAME file with domain:', CONFIG.deployment.customDomain);
+          } else {
+            console.log('No custom domain configured, skipping CNAME file');
+          }
+          "
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

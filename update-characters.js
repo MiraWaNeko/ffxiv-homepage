@@ -2,24 +2,12 @@ import fetch from 'node-fetch';
 import * as cheerio from 'cheerio';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { fetchNewAchievements } from './fetch-achievements.js';
+import CONFIG from './config.js';
 
-const CHARACTERS = [
-  {
-    id: '24921505',
-    name: 'Mira Wa\'neko',
-    world: 'Diabolos [Crystal]',
-    image: 'https://img2.finalfantasyxiv.com/f/7c13a0269a6d7953946aff5be6ecff69_7b33d33ae3ecb996f778a5f67a6a0af6fl0.jpg?1768586024'
-  },
-  {
-    id: '24387385',
-    name: 'Mira Wa\'neko',
-    world: 'Zodiark [Light]',
-    image: 'https://img2.finalfantasyxiv.com/f/e5de5126497a6bf816908d12fdb2e908_c274370774c6bc3483cc8740805f41bcfl0.jpg?1768583610'
-  }
-];
+const CHARACTERS = CONFIG.characters;
 
 async function fetchCharacterJobs(characterId) {
-  const url = `https://na.finalfantasyxiv.com/lodestone/character/${characterId}/class_job/`;
+  const url = `https://${CONFIG.lodestone.region}.finalfantasyxiv.com/lodestone/character/${characterId}/class_job/`;
 
   try {
     const response = await fetch(url, {
@@ -233,7 +221,7 @@ function getJobEquivalent(className) {
 async function fetchAchievementData(characterId) {
   try {
     console.log(`Fetching achievement data for character ${characterId}...`);
-    const result = await fetchNewAchievements(characterId, 'na');
+    const result = await fetchNewAchievements(characterId, CONFIG.lodestone.region);
 
     if (result && result.total > 0) {
       console.log(`✓ Achievement points fetched for character ${characterId}: ${result.totalPoints} (${result.total} achievements)`);
