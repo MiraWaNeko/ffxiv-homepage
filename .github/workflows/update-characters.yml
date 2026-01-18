@@ -39,10 +39,23 @@ jobs:
       - name: Fetch character data
         run: pnpm run update
 
+      - name: Prepare deployment directory
+        run: |
+          mkdir -p deploy
+          cp index.html deploy/
+          cp render.js deploy/
+          cp styles.css deploy/
+          cp favicon.svg deploy/
+          cp data.js deploy/
+          cp achievements-cache.json deploy/
+          cp achievements.json deploy/
+          cp time-limited-achievements.json deploy/
+          echo "ffxiv.mirawaneko.net" > deploy/CNAME
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          publish_dir: ./deploy
           publish_branch: gh-pages
           force_orphan: true
