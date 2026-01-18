@@ -17,7 +17,7 @@ An automatically-updating portfolio page showcasing your FFXIV characters with j
 - **Alternating Card Layouts**: Character cards automatically alternate layout for visual variety
 - **Last Updated Timestamps**: Shows when character data was last refreshed
 - **Dynamic Cache Busting**: Automatic cache invalidation ensures users see the latest updates
-- **Social Media Links**: Display your FFXIV-related Twitter and Bluesky profiles
+- **Social Media Links**: Display your social profiles (supports Twitter, Bluesky, YouTube, Twitch, TikTok)
 
 ## Setup
 
@@ -87,6 +87,8 @@ socialLinks: [
   }
 ]
 ```
+
+**Supported platforms:** `twitter`, `bluesky`, `youtube`, `twitch`, `tiktok`
 
 Set to `null` or `[]` if you don't want social links displayed.
 

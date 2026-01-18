@@ -57,7 +57,7 @@ const CONFIG = {
   // SOCIAL MEDIA LINKS
   // ==========================================================================
   // Add your social media links here. Set to null or empty array if you don't want social links.
-  // Supported platforms: twitter, bluesky (you can add more by updating the CSS and HTML)
+  // Supported platforms: twitter, bluesky, youtube, twitch, tiktok
   // ==========================================================================
   socialLinks: [
     {
@@ -70,6 +70,22 @@ const CONFIG = {
       url: 'https://bsky.app/profile/ffxiv.mirawaneko.net',
       label: 'Bluesky'
     }
+    // Examples of other supported platforms:
+    // {
+    //   platform: 'youtube',
+    //   url: 'https://youtube.com/@your-channel',
+    //   label: 'YouTube'
+    // },
+    // {
+    //   platform: 'twitch',
+    //   url: 'https://twitch.tv/your-username',
+    //   label: 'Twitch'
+    // },
+    // {
+    //   platform: 'tiktok',
+    //   url: 'https://tiktok.com/@your-username',
+    //   label: 'TikTok'
+    // }
   ],
 
   // ==========================================================================
