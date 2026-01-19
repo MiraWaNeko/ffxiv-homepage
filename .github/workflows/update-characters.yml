@@ -35,11 +35,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Restore cache from previous deployment
+      - name: Restore cache and data from previous deployment
         continue-on-error: true
         run: |
           git fetch origin gh-pages:gh-pages || true
           git checkout gh-pages -- achievements-cache.json || true
+          git checkout gh-pages -- data.js || true
 
       - name: Fetch character data
         run: pnpm run update
@@ -70,7 +71,47 @@ jobs:
           }
           "
 
+      - name: Check if deployment needed
+        id: check_changes
+        continue-on-error: true
+        run: |
+          git fetch origin gh-pages:gh-pages || true
+
+          # Create a temp directory for old files
+          mkdir -p old_deploy
+
+          # List of files to check for changes
+          FILES_TO_CHECK="index.html styles.css render.js data.js achievements.json time-limited-achievements.json"
+
+          # Try to get previous deployment files
+          for file in $FILES_TO_CHECK; do
+            git show gh-pages:$file > old_deploy/$file 2>/dev/null || true
+          done
+
+          # Check if any files have changed
+          CHANGES_DETECTED=false
+          for file in $FILES_TO_CHECK; do
+            if [ ! -f "old_deploy/$file" ]; then
+              echo "New file detected: $file"
+              CHANGES_DETECTED=true
+              break
+            elif ! diff -q "deploy/$file" "old_deploy/$file" >/dev/null 2>&1; then
+              echo "Changes detected in: $file"
+              CHANGES_DETECTED=true
+              break
+            fi
+          done
+
+          if [ "$CHANGES_DETECTED" = true ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Deployment needed - changes detected"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No deployment needed - no changes detected"
+          fi
+
       - name: Deploy to GitHub Pages
+        if: steps.check_changes.outputs.changed == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
