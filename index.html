@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script type="module">
+        // Load configuration and set page title and header
+        import CONFIG from './config.js';
+        document.title = CONFIG.site.title;
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('header h1').textContent = CONFIG.site.header;
+        });
+    </script>
+    <script>
+        // Dynamic cache busting - append timestamp to CSS and JS loads
+        const v = Date.now();
+        document.write(`<link rel="stylesheet" href="styles.css?v=${v}">`);
+        document.write(`<script type="module" src="render.js?v=${v}"><\/script>`);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FFXIV Characters</h1>
+        </header>
+
+        <main>
+            <div class="characters-grid">
+                <!-- Character cards will be dynamically loaded from data.js -->
+            </div>
+
+            <!-- Social links will be dynamically loaded from config.js -->
+            <section class="social-links" id="social-links-section"></section>
+        </main>
+
+        <footer>
+            <p>Made by Mira wa Neko - <a href="https://github.com/mirawaneko/ffxiv-homepage" target="_blank" rel="noopener noreferrer">Github</a></p>
+            <p class="trademark">FINAL FANTASY XIV &copy; SQUARE ENIX CO., LTD. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
