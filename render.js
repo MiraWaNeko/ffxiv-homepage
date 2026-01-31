@@ -1,5 +1,4 @@
-// Dynamic cache busting for data.js
-const characterData = await import(`./data.js?v=${Date.now()}`).then(m => m.default);
+import characterData from './data.js';
 
 // Import configuration
 import CONFIG from './config.js';

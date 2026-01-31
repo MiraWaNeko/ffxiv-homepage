@@ -58,6 +58,18 @@ jobs:
           cp achievements.json deploy/
           cp time-limited-achievements.json deploy/
 
+      - name: Inject config values and cache-busting version
+        run: |
+          BUILD_VERSION=$(date +%s)
+          SITE_TITLE=$(node --input-type=module -e "import C from './config.js'; process.stdout.write(C.site.title);")
+          SITE_HEADER=$(node --input-type=module -e "import C from './config.js'; process.stdout.write(C.site.header);")
+          sed -i "s|<title>FFXIV Characters</title>|<title>${SITE_TITLE}</title>|" deploy/index.html
+          sed -i "s|<h1>FFXIV Characters</h1>|<h1>${SITE_HEADER}</h1>|" deploy/index.html
+          sed -i "s|href=\"styles.css\"|href=\"styles.css?v=${BUILD_VERSION}\"|" deploy/index.html
+          sed -i "s|src=\"render.js\"|src=\"render.js?v=${BUILD_VERSION}\"|" deploy/index.html
+          sed -i "s|from './data.js'|from './data.js?v=${BUILD_VERSION}'|" deploy/render.js
+          echo "Cache-busting version: ${BUILD_VERSION}"
+
       - name: Create CNAME file from config
         run: |
           node --input-type=module -e "
