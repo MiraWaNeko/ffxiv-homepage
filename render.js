@@ -121,6 +121,79 @@ function renderJobBadge(jobAbbr, level, maxLevel) {
   }
 }
 
+function renderRelicBadge(relicData, type = 'weapon') {
+  const { name, abbr, expansion, completed, total, percentage, highestStage, isComplete } = relicData;
+
+  // Determine badge class based on completion
+  let badgeClass = 'relic-badge';
+  if (isComplete || percentage === 100) {
+    badgeClass += ' complete';
+  } else if (percentage > 0) {
+    badgeClass += ' in-progress';
+  } else {
+    badgeClass += ' not-started';
+  }
+
+  // Build the badge HTML
+  const stageInfo = highestStage ? `<div class="relic-stage">${highestStage}</div>` : '';
+  const progressBar = percentage > 0 ? `<div class="relic-progress"><div class="relic-progress-bar" style="width: ${percentage}%"></div></div>` : '';
+
+  return `
+    <div class="${badgeClass}" title="${name} - ${expansion}${highestStage ? ' (' + highestStage + ')' : ''}\n${completed}/${total} ${type}s completed">
+      <div class="relic-name">${abbr}</div>
+      ${stageInfo}
+      <div class="relic-completion">${completed}/${total}</div>
+      ${progressBar}
+    </div>
+  `;
+}
+
+function renderRelicSection(relics) {
+  if (!relics) return '';
+
+  const weaponRelics = relics.weapons || {};
+  const toolRelics = relics.tools || {};
+
+  // Filter out relics with no progress or data
+  const weaponEntries = Object.entries(weaponRelics).filter(([_, data]) => data.total > 0);
+  const toolEntries = Object.entries(toolRelics).filter(([_, data]) => data.total > 0);
+
+  if (weaponEntries.length === 0 && toolEntries.length === 0) {
+    return '';
+  }
+
+  let relicsHTML = '<div class="relic-section">';
+
+  // Render weapon relics
+  if (weaponEntries.length > 0) {
+    relicsHTML += '<div class="relic-category">';
+    relicsHTML += '<div class="relic-category-title">Relic Weapons</div>';
+    relicsHTML += '<div class="relic-list">';
+
+    for (const [key, data] of weaponEntries) {
+      relicsHTML += renderRelicBadge(data, 'weapon');
+    }
+
+    relicsHTML += '</div></div>';
+  }
+
+  // Render tool relics
+  if (toolEntries.length > 0) {
+    relicsHTML += '<div class="relic-category">';
+    relicsHTML += '<div class="relic-category-title">Relic Tools</div>';
+    relicsHTML += '<div class="relic-list">';
+
+    for (const [key, data] of toolEntries) {
+      relicsHTML += renderRelicBadge(data, 'tool');
+    }
+
+    relicsHTML += '</div></div>';
+  }
+
+  relicsHTML += '</div>';
+  return relicsHTML;
+}
+
 function renderCharacterCard(character, index) {
   const { id, name, world, image, jobs, achievements, lastUpdated } = character;
   const shouldReverse = index % 2 === 1;
@@ -256,6 +329,9 @@ function renderCharacterCard(character, index) {
     `;
   }
 
+  // Render relic section if we have achievement data with relics
+  const relicHTML = achievements && achievements.relics ? renderRelicSection(achievements.relics) : '';
+
   const infoHTML = `
     <div class="character-info">
       <h2 class="character-name">${name}</h2>
@@ -263,6 +339,7 @@ function renderCharacterCard(character, index) {
       <div class="job-categories">
         ${jobCategoriesHTML}
       </div>
+      ${relicHTML}
       <div class="last-updated">Last updated: ${formattedDate}</div>
     </div>
   `;

@@ -19,6 +19,9 @@ function loadAchievementDatabase() {
 // Get achievement points from database
 function getAchievementPoints(achievementId) {
   const db = loadAchievementDatabase();
+  if (db[achievementId] === undefined) {
+    console.warn(`Achievement ID ${achievementId} not found in database, assuming 0 points`);
+  }
   return db[achievementId]?.points || 0;
 }
 

@@ -1,8 +1,9 @@
 import fetch from 'node-fetch';
 import * as cheerio from 'cheerio';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { fetchNewAchievements } from './fetch-achievements.js';
+import { fetchNewAchievements, loadCache } from './fetch-achievements.js';
 import CONFIG from './config.js';
+import { RELIC_WEAPONS, RELIC_TOOLS, checkRelicCompletion, getHighestStage } from './relic-definitions.js';
 
 const CHARACTERS = CONFIG.characters;
 
@@ -218,6 +219,49 @@ function getJobEquivalent(className) {
   return classToJob[className] || className;
 }
 
+function analyzeRelicProgress(characterAchievements) {
+  const relics = {
+    weapons: {},
+    tools: {}
+  };
+
+  // Analyze weapon relics
+  for (const [key, relic] of Object.entries(RELIC_WEAPONS)) {
+    const completion = checkRelicCompletion(characterAchievements, relic);
+    const highestStage = getHighestStage(characterAchievements, relic);
+
+    relics.weapons[key] = {
+      name: relic.name,
+      abbr: relic.abbr,
+      expansion: relic.expansion,
+      completed: completion.completed,
+      total: completion.total,
+      percentage: completion.percentage,
+      highestStage: highestStage,
+      isComplete: completion.percentage === 100
+    };
+  }
+
+  // Analyze tool relics
+  for (const [key, relic] of Object.entries(RELIC_TOOLS)) {
+    const completion = checkRelicCompletion(characterAchievements, relic);
+    const highestStage = getHighestStage(characterAchievements, relic);
+
+    relics.tools[key] = {
+      name: relic.name,
+      abbr: relic.abbr,
+      expansion: relic.expansion,
+      completed: completion.completed,
+      total: completion.total,
+      percentage: completion.percentage,
+      highestStage: highestStage,
+      isComplete: completion.percentage === 100
+    };
+  }
+
+  return relics;
+}
+
 async function fetchAchievementData(characterId) {
   try {
     console.log(`Fetching achievement data for character ${characterId}...`);
@@ -226,11 +270,20 @@ async function fetchAchievementData(characterId) {
     if (result && result.total > 0) {
       console.log(`✓ Achievement points fetched for character ${characterId}: ${result.totalPoints} (${result.total} achievements)`);
 
+      // Load full achievement cache to analyze relics
+      const cache = loadCache();
+      const charKey = `${characterId}-${CONFIG.lodestone.region}`;
+      const characterAchievements = cache[charKey]?.achievements || [];
+
+      // Analyze relic progress
+      const relics = analyzeRelicProgress(characterAchievements);
+
       // Achievement IDs are stored in achievements-cache.json
-      // We only store the scores in data.js
+      // We store scores and relic progress in data.js
       return {
         allScore: result.totalPoints,
-        baseScore: result.baseScore
+        baseScore: result.baseScore,
+        relics: relics
       };
     }
 

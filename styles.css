@@ -440,6 +440,167 @@ header h1::after {
     box-shadow: 0 0 15px rgba(201, 169, 97, 0.3);
 }
 
+/* Relic Section */
+.relic-section {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 2px solid rgba(201, 169, 97, 0.15);
+}
+
+.relic-category {
+    margin-bottom: 18px;
+    padding: 12px;
+    background: rgba(201, 169, 97, 0.03);
+    border-left: 3px solid rgba(201, 169, 97, 0.4);
+    border-radius: 2px;
+}
+
+.relic-category-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: #c9a961;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.relic-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.relic-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.5), rgba(15, 20, 30, 0.2));
+    border: 1px solid rgba(139, 115, 85, 0.2);
+    color: #544e3f;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    min-width: 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.relic-name {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.relic-stage {
+    font-size: 0.7rem;
+    color: #8b7355;
+    font-style: italic;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.relic-completion {
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.relic-progress {
+    width: 100%;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.3);
+    margin-top: 6px;
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.relic-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #8b7355, #c9a961);
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px rgba(201, 169, 97, 0.5);
+}
+
+/* Relic Badge States */
+.relic-badge.not-started {
+    opacity: 0.5;
+}
+
+.relic-badge.not-started:hover {
+    opacity: 0.7;
+}
+
+.relic-badge.in-progress {
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.8), rgba(15, 20, 30, 0.9));
+    border-color: rgba(139, 115, 85, 0.5);
+    color: #d4c5a0;
+}
+
+.relic-badge.in-progress .relic-progress-bar {
+    background: linear-gradient(90deg, #c9a961, #f4e4bc);
+    box-shadow: 0 0 12px rgba(201, 169, 97, 0.7);
+}
+
+.relic-badge.in-progress:hover {
+    background: linear-gradient(135deg, rgba(30, 35, 45, 0.9), rgba(25, 30, 40, 1));
+    border-color: rgba(201, 169, 97, 0.6);
+    color: #f4e4bc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(201, 169, 97, 0.2);
+}
+
+.relic-badge.complete {
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.2), rgba(139, 115, 85, 0.3));
+    border-color: #c9a961;
+    color: #f4e4bc;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(201, 169, 97, 0.3);
+}
+
+.relic-badge.complete .relic-name {
+    color: #f4e4bc;
+}
+
+.relic-badge.complete .relic-stage {
+    color: #c9a961;
+}
+
+.relic-badge.complete .relic-completion {
+    color: #f4e4bc;
+    text-shadow: 0 0 10px rgba(201, 169, 97, 0.5);
+}
+
+.relic-badge.complete .relic-progress-bar {
+    background: linear-gradient(90deg, #c9a961, #f4e4bc, #c9a961);
+    box-shadow: 0 0 20px rgba(201, 169, 97, 0.8);
+    animation: shimmer 2s infinite;
+}
+
+.relic-badge.complete:hover {
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.3), rgba(139, 115, 85, 0.4));
+    border-color: #f4e4bc;
+    transform: translateY(-2px);
+    box-shadow:
+        0 4px 8px rgba(201, 169, 97, 0.3),
+        0 0 25px rgba(201, 169, 97, 0.5);
+}
+
+@keyframes shimmer {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
 /* Social Links Section */
 .social-links {
     text-align: center;
