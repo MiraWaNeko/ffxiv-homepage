@@ -732,6 +732,23 @@ footer a:hover {
 }
 
 /* Responsive Design */
+
+/* Large screens */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 2000px;
+    }
+
+    .characters-grid {
+        max-width: 2000px;
+    }
+
+    .character-image {
+        width: 500px;
+        min-width: 500px;
+    }
+}
+
 @media (max-width: 1024px) {
     .character-image {
         width: 350px;
