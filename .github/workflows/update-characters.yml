@@ -93,7 +93,7 @@ jobs:
           mkdir -p old_deploy
 
           # List of files to check for changes
-          FILES_TO_CHECK="index.html styles.css render.js data.js achievements.json time-limited-achievements.json"
+          FILES_TO_CHECK="data.js achievements.json time-limited-achievements.json"
 
           # Try to get previous deployment files
           for file in $FILES_TO_CHECK; do
