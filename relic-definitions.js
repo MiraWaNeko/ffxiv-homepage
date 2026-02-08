@@ -11,7 +11,8 @@ export const RELIC_WEAPONS = {
       { name: 'Zodiac', ids: [1054] },
       { name: 'Nexus', ids: [1028] },
       { name: 'Novus', ids: [926] },
-      { name: 'Animus', ids: [925] }
+      { name: 'Animus', ids: [925] },
+      { name: 'Zodarc', ids: Array.from({ length: 13 }, (_, i) => 129 + i) },
     ]
   },
   hw: {
@@ -143,6 +144,73 @@ export function checkRelicCompletion(characterAchievements, relicSeries) {
   const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   return { completed, total, percentage };
+}
+
+// Helper function to check if a character has completed a relic series
+export function checkRelicFinalCompletion(characterAchievements, relicSeries) {
+  if (!characterAchievements || !relicSeries.stages) {
+    return { completed: 0, total: 0, percentage: 0 };
+  }
+
+  const finalStage = relicSeries.stages[0];
+  const allIds = finalStage.ids || [];
+
+  if (allIds.length === 0) {
+    return { completed: 0, total: 0, percentage: 0 };
+  }
+
+  const completed = allIds.filter(id =>
+    characterAchievements.includes(id)
+  ).length;
+
+  const total = allIds.length;
+  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  return { completed, total, percentage };
+}
+
+// Helper function to check if a character has completed a relic series
+export function checkRelicStageCompletion(characterAchievements, relicSeries, stageIndex) {
+  if (!characterAchievements || !relicSeries.stages || stageIndex < 0 || stageIndex >= relicSeries.stages.length) {
+    return { completed: 0, total: 0, percentage: 0 };
+  }
+
+  const stage = relicSeries.stages[stageIndex];
+  const allIds = stage?.ids || [];
+
+  if (allIds.length === 0) {
+    return { completed: 0, total: 0, percentage: 0 };
+  }
+
+  const completed = allIds.filter(id =>
+    characterAchievements.includes(id)
+  ).length;
+
+  const total = allIds.length;
+  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  return { completed, total, percentage };
+}
+
+// Helper function to get the highest completed stage for a relic series
+export function getBiggestStage(characterAchievements, relicSeries) {
+  if (!characterAchievements || !relicSeries.stages) {
+    return null;
+  }
+
+  let biggestStage = null;
+  let biggestStageCount = 0;
+  for (const stage of relicSeries.stages) {
+    if (!stage.ids || stage.ids.length < 2) {
+      continue;
+    }
+    if (stage.ids.length > biggestStageCount) {
+      biggestStage = stage.name;
+      biggestStageCount = stage.ids.length;
+    }
+  }
+
+  return biggestStage;
 }
 
 // Helper function to get the highest completed stage for a relic series

@@ -3,7 +3,7 @@ import * as cheerio from 'cheerio';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { fetchNewAchievements, loadCache } from './fetch-achievements.js';
 import CONFIG from './config.js';
-import { RELIC_WEAPONS, RELIC_TOOLS, checkRelicCompletion, getHighestStage } from './relic-definitions.js';
+import { RELIC_WEAPONS, RELIC_TOOLS, checkRelicStageCompletion, getHighestStage, getBiggestStage } from './relic-definitions.js';
 
 const CHARACTERS = CONFIG.characters;
 
@@ -227,8 +227,23 @@ function analyzeRelicProgress(characterAchievements) {
 
   // Analyze weapon relics
   for (const [key, relic] of Object.entries(RELIC_WEAPONS)) {
-    const completion = checkRelicCompletion(characterAchievements, relic);
     const highestStage = getHighestStage(characterAchievements, relic);
+    let hasProgress = false;
+    const stages = (relic.stages || []).map((stage, index) => {
+      const stageCompletion = checkRelicStageCompletion(characterAchievements, relic, index);
+      if (stageCompletion.completed > 0) {
+        hasProgress = true;
+      }
+      return {
+        index,
+        name: stage.name,
+        completed: stageCompletion.completed,
+        total: stageCompletion.total,
+        percentage: stageCompletion.percentage
+      };
+    });
+    const biggestStage = getBiggestStage(characterAchievements, relic);
+    const completion = checkRelicStageCompletion(characterAchievements, relic, stages.find((stage) => stage.name === biggestStage)?.index || 0);
 
     relics.weapons[key] = {
       name: relic.name,
@@ -238,14 +253,31 @@ function analyzeRelicProgress(characterAchievements) {
       total: completion.total,
       percentage: completion.percentage,
       highestStage: highestStage,
+      stages: stages,
+      inProgress: hasProgress,
       isComplete: completion.percentage === 100
     };
   }
 
   // Analyze tool relics
   for (const [key, relic] of Object.entries(RELIC_TOOLS)) {
-    const completion = checkRelicCompletion(characterAchievements, relic);
     const highestStage = getHighestStage(characterAchievements, relic);
+    let hasProgress = false;
+    const stages = (relic.stages || []).map((stage, index) => {
+      const stageCompletion = checkRelicStageCompletion(characterAchievements, relic, index);
+      if (stageCompletion.completed > 0) {
+        hasProgress = true;
+      }
+      return {
+        index,
+        name: stage.name,
+        completed: stageCompletion.completed,
+        total: stageCompletion.total,
+        percentage: stageCompletion.percentage
+      };
+    });
+    const biggestStage = getBiggestStage(characterAchievements, relic);
+    const completion = checkRelicStageCompletion(characterAchievements, relic, stages.find((stage) => stage.name === biggestStage)?.index || 0);
 
     relics.tools[key] = {
       name: relic.name,
@@ -254,7 +286,9 @@ function analyzeRelicProgress(characterAchievements) {
       completed: completion.completed,
       total: completion.total,
       percentage: completion.percentage,
+      stages: stages,
       highestStage: highestStage,
+      inProgress: hasProgress,
       isComplete: completion.percentage === 100
     };
   }
@@ -321,41 +355,89 @@ function hasDataChanged(oldChar, newChar) {
   return JSON.stringify(oldData) !== JSON.stringify(newData);
 }
 
-async function updateAllCharacters() {
-  console.log('Fetching character data from Lodestone...');
+function recalculateAchievements(characterId) {
+  const cache = loadCache();
+  const charKey = `${characterId}-${CONFIG.lodestone.region}`;
+  const charCache = cache[charKey];
 
+  if (!charCache?.achievements?.length) {
+    return null;
+  }
+
+  const relics = analyzeRelicProgress(charCache.achievements);
+
+  return {
+    allScore: charCache.totalPoints || 0,
+    baseScore: charCache.baseScore || 0,
+    relics: relics
+  };
+}
+
+async function updateAllCharacters() {
+  const localOnly = process.argv.includes('--local');
   const existingData = loadExistingData();
   const updatedCharacters = [];
 
-  for (const char of CHARACTERS) {
-    console.log(`Fetching data for ${char.name} (${char.world})...`);
-    const jobs = await fetchCharacterJobs(char.id);
-    const achievements = await fetchAchievementData(char.id);
+  if (localOnly) {
+    console.log('Running in local mode — recalculating from cached data...');
 
-    if (jobs) {
+    for (const char of CHARACTERS) {
+      const existingChar = existingData.find(c => c.id === char.id);
+      if (!existingChar) {
+        console.log(`No existing data for ${char.name}, skipping (run without --local first)`);
+        continue;
+      }
+
+      console.log(`Recalculating achievements for ${char.name}...`);
+      const achievements = recalculateAchievements(char.id);
+
       const newCharData = {
-        ...char,
-        jobs,
-        achievements
+        ...existingChar,
+        achievements: achievements || existingChar.achievements
       };
 
-      // Find existing character data by ID
-      const existingChar = existingData.find(c => c.id === char.id);
-
-      // Only update timestamp if data has changed
-      if (existingChar && !hasDataChanged(existingChar, newCharData)) {
-        newCharData.lastUpdated = existingChar.lastUpdated;
-        console.log(`No changes detected for ${char.name}, keeping existing timestamp`);
-      } else {
+      if (hasDataChanged(existingChar, newCharData)) {
         newCharData.lastUpdated = new Date().toISOString();
         console.log(`Data changed for ${char.name}, updating timestamp`);
+      } else {
+        console.log(`No changes detected for ${char.name}, keeping existing timestamp`);
       }
 
       updatedCharacters.push(newCharData);
     }
+  } else {
+    console.log('Fetching character data from Lodestone...');
 
-    // Add delay to be respectful to the server
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    for (const char of CHARACTERS) {
+      console.log(`Fetching data for ${char.name} (${char.world})...`);
+      const jobs = await fetchCharacterJobs(char.id);
+      const achievements = await fetchAchievementData(char.id);
+
+      if (jobs) {
+        const newCharData = {
+          ...char,
+          jobs,
+          achievements
+        };
+
+        // Find existing character data by ID
+        const existingChar = existingData.find(c => c.id === char.id);
+
+        // Only update timestamp if data has changed
+        if (existingChar && !hasDataChanged(existingChar, newCharData)) {
+          newCharData.lastUpdated = existingChar.lastUpdated;
+          console.log(`No changes detected for ${char.name}, keeping existing timestamp`);
+        } else {
+          newCharData.lastUpdated = new Date().toISOString();
+          console.log(`Data changed for ${char.name}, updating timestamp`);
+        }
+
+        updatedCharacters.push(newCharData);
+      }
+
+      // Add delay to be respectful to the server
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
   }
 
   const output = `// Auto-generated by update-characters.js

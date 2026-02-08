@@ -121,13 +121,13 @@ function renderJobBadge(jobAbbr, level, maxLevel) {
 }
 
 function renderRelicBadge(relicData, type = 'weapon') {
-  const { name, abbr, expansion, completed, total, percentage, highestStage, isComplete } = relicData;
+  const { name, abbr, expansion, completed, total, percentage, highestStage, inProgress, isComplete } = relicData;
 
   // Determine badge class based on completion
   let badgeClass = 'relic-badge';
   if (isComplete || percentage === 100) {
     badgeClass += ' complete';
-  } else if (percentage > 0) {
+  } else if (inProgress || percentage > 0) {
     badgeClass += ' in-progress';
   } else {
     badgeClass += ' not-started';
@@ -137,12 +137,24 @@ function renderRelicBadge(relicData, type = 'weapon') {
   const stageInfo = highestStage ? `<div class="relic-stage">${highestStage}</div>` : '';
   const progressBar = percentage > 0 ? `<div class="relic-progress"><div class="relic-progress-bar" style="width: ${percentage}%"></div></div>` : '';
 
+  const progressBars = `<div class="relic-progress-bars">
+    ${relicData.stages.map(stage => {
+      const stagePercentage = stage.total > 0 ? Math.round((stage.completed / stage.total) * 100) : 0;
+      return `
+        <div class="relic-progress-bar-container" title="${stage.name}: ${stage.completed}/${stage.total} completed (${stagePercentage}%)">
+          <div class="relic-progress"><div class="relic-progress-bar" style="width: ${stagePercentage}%"></div></div>
+          <div class="relic-progress-bar-label">${stage.name}</div>
+        </div>
+      `;
+    }).join('')}
+  </div>`;
+
   return `
     <div class="${badgeClass}" title="${name} - ${expansion}${highestStage ? ' (' + highestStage + ')' : ''}\n${completed}/${total} ${type}s completed">
       <div class="relic-name">${abbr}</div>
       ${stageInfo}
       <div class="relic-completion">${completed}/${total}</div>
-      ${progressBar}
+      ${progressBars}
     </div>
   `;
 }
