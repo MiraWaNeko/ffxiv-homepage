@@ -267,6 +267,20 @@ function renderCharacterCard(character, index) {
     </div>
   `;
 
+  // Phantom Jobs
+  jobCategoriesHTML += `
+    <div class="job-category">
+      <div class="job-category-title">Phantom Jobs</div>
+      <div class="job-list">
+        ${JOB_ROLES.phantom.map(job => {
+          const level = getJobLevel(allJobs, job.name);
+          const maxLevel = getMaxLevel(job.name);
+          return renderJobBadge(job.abbr, level, maxLevel);
+        }).join('')}
+      </div>
+    </div>
+  `;
+
   // Crafters
   jobCategoriesHTML += `
     <div class="job-category">
@@ -287,20 +301,6 @@ function renderCharacterCard(character, index) {
       <div class="job-category-title">Gatherers</div>
       <div class="job-list">
         ${JOB_ROLES.gatherers.map(job => {
-          const level = getJobLevel(allJobs, job.name);
-          const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(job.abbr, level, maxLevel);
-        }).join('')}
-      </div>
-    </div>
-  `;
-
-  // Phantom Jobs (Marionette/Eureka/Bozja)
-  jobCategoriesHTML += `
-    <div class="job-category">
-      <div class="job-category-title">Phantom Jobs</div>
-      <div class="job-list">
-        ${JOB_ROLES.phantom.map(job => {
           const level = getJobLevel(allJobs, job.name);
           const maxLevel = getMaxLevel(job.name);
           return renderJobBadge(job.abbr, level, maxLevel);

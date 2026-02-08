@@ -747,6 +747,16 @@ footer a:hover {
         width: 500px;
         min-width: 500px;
     }
+
+    .job-categories {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .job-category {
+        margin-bottom: 0;
+    }
 }
 
 @media (max-width: 1024px) {
