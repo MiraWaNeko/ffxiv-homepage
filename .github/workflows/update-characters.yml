@@ -9,7 +9,13 @@ on:
     #   '0 0,12 * * *' = Twice per day (midnight and noon UTC)
     # See https://crontab.guru/ for help with cron expressions
     - cron: '0 */6 * * *'
-  workflow_dispatch: # Allows manual triggering
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Force deployment even if no changes detected'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -123,7 +129,7 @@ jobs:
           fi
 
       - name: Deploy to GitHub Pages
-        if: steps.check_changes.outputs.changed == 'true'
+        if: steps.check_changes.outputs.changed == 'true' || inputs.force_deploy == true
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
