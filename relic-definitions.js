@@ -106,6 +106,7 @@ export const RELIC_TOOLS = {
     expansion: 'Dawntrail',
     abbr: 'Cosmic',
     stages: [
+      { name: 'Stars', ids: Array.from({ length: 11 }, (_, i) => 3914 + i) },
       { name: 'Hyper', ids: Array.from({ length: 11 }, (_, i) => 3877 + i) },
       { name: 'Stellar', ids: Array.from({ length: 11 }, (_, i) => 3792 + i) },
       { name: 'Cosmic', ids: Array.from({ length: 11 }, (_, i) => 3691 + i) }
