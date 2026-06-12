@@ -39,7 +39,7 @@ const CONFIG = {
     {
       id: '24387385',
       name: 'Mira Wa\'neko',
-      world: 'Zodiark [Light]',
+      world: 'Maduin [Dynamis]',
       image: 'https://img2.finalfantasyxiv.com/f/e5de5126497a6bf816908d12fdb2e908_c274370774c6bc3483cc8740805f41bcfl0.jpg?1768583610'
     }
   ],
