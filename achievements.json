@@ -15059,6 +15059,26 @@
     "name": "Worqor and Peace VI",
     "points": 10
   },
+  "3837": {
+    "name": "Rhyme & Region 2026",
+    "points": 0
+  },
+  "3838": {
+    "name": "Rhyme & Region 2026",
+    "points": 0
+  },
+  "3839": {
+    "name": "Rhyme & Region 2026",
+    "points": 0
+  },
+  "3840": {
+    "name": "Rhyme & Region 2026 - Finalist",
+    "points": 0
+  },
+  "3841": {
+    "name": "Rhyme & Region 2026 - Placed",
+    "points": 0
+  },
   "3842": {
     "name": "Clare Obscurum: Sword & Shield Obscurum",
     "points": 10
@@ -15180,7 +15200,15 @@
     "points": 10
   },
   "3872": {
-    "name": "芽吹く新緑の季節",
+    "name": "Springtime Delights",
+    "points": 10
+  },
+  "3873": {
+    "name": "Golden Globe-trotter",
+    "points": 10
+  },
+  "3874": {
+    "name": "Summertime Drifter",
     "points": 10
   },
   "3876": {
@@ -15239,8 +15267,324 @@
     "name": "I Choo-Choo-Choose Doom",
     "points": 10
   },
+  "3890": {
+    "name": "Mapping the Realm: The Merchant's Tale",
+    "points": 10
+  },
+  "3892": {
+    "name": "Through the Carpets and Flames",
+    "points": 5
+  },
+  "3893": {
+    "name": "Singing with the Fishes",
+    "points": 5
+  },
+  "3894": {
+    "name": "Master of Masters",
+    "points": 5
+  },
+  "3895": {
+    "name": "The Strife Aquatic",
+    "points": 5
+  },
+  "3896": {
+    "name": "A Timeless Tale",
+    "points": 20
+  },
+  "3897": {
+    "name": "A Storied Collection",
+    "points": 10
+  },
+  "3898": {
+    "name": "Stranger than Fiction",
+    "points": 10
+  },
+  "3899": {
+    "name": "One Thousand and One Fights",
+    "points": 20
+  },
   "3900": {
     "name": "Design and Conquer 2025",
     "points": 0
+  },
+  "3901": {
+    "name": "Goldilocks Zone",
+    "points": 20
+  },
+  "3902": {
+    "name": "Master of the Universe: Carpenter",
+    "points": 10
+  },
+  "3903": {
+    "name": "Master of the Universe: Blacksmith",
+    "points": 10
+  },
+  "3904": {
+    "name": "Master of the Universe: Armorer",
+    "points": 10
+  },
+  "3905": {
+    "name": "Master of the Universe: Goldsmith",
+    "points": 10
+  },
+  "3906": {
+    "name": "Master of the Universe: Leatherworker",
+    "points": 10
+  },
+  "3907": {
+    "name": "Master of the Universe: Weaver",
+    "points": 10
+  },
+  "3908": {
+    "name": "Master of the Universe: Alchemist",
+    "points": 10
+  },
+  "3909": {
+    "name": "Master of the Universe: Culinarian",
+    "points": 10
+  },
+  "3910": {
+    "name": "Master of the Universe: Miner",
+    "points": 10
+  },
+  "3911": {
+    "name": "Master of the Universe: Botanist",
+    "points": 10
+  },
+  "3912": {
+    "name": "Master of the Universe: Fisher",
+    "points": 10
+  },
+  "3913": {
+    "name": "Universal Acclaim",
+    "points": 20
+  },
+  "3914": {
+    "name": "R&D: Saw of Stars",
+    "points": 10
+  },
+  "3915": {
+    "name": "R&D: Cross-pein Hammer of Stars",
+    "points": 10
+  },
+  "3916": {
+    "name": "R&D: Raising Hammer of Stars",
+    "points": 10
+  },
+  "3917": {
+    "name": "R&D: Mallet of Stars",
+    "points": 10
+  },
+  "3918": {
+    "name": "R&D: Round Knife of Stars",
+    "points": 10
+  },
+  "3919": {
+    "name": "R&D: Needle of Stars",
+    "points": 10
+  },
+  "3920": {
+    "name": "R&D: Alembic of Stars",
+    "points": 10
+  },
+  "3921": {
+    "name": "R&D: Frypan of Stars",
+    "points": 10
+  },
+  "3922": {
+    "name": "R&D: Pickaxe of Stars",
+    "points": 10
+  },
+  "3923": {
+    "name": "R&D: Hatchet of Stars",
+    "points": 10
+  },
+  "3924": {
+    "name": "R&D: Fishing Rod of Stars",
+    "points": 10
+  },
+  "3925": {
+    "name": "The Outer Researches",
+    "points": 10
+  },
+  "3926": {
+    "name": "Top Tier: Season Nineteen",
+    "points": 20
+  },
+  "3927": {
+    "name": "Crystal in the Rough: Season Nineteen",
+    "points": 20
+  },
+  "3928": {
+    "name": "Ranked and Filed: Season Nineteen",
+    "points": 20
+  },
+  "3929": {
+    "name": "Top Tier: Season Twenty",
+    "points": 20
+  },
+  "3930": {
+    "name": "Crystal in the Rough: Season Twenty",
+    "points": 20
+  },
+  "3931": {
+    "name": "Ranked and Filed: Season Twenty",
+    "points": 20
+  },
+  "3932": {
+    "name": "Top Tier: Season Twenty-one",
+    "points": 20
+  },
+  "3933": {
+    "name": "Crystal in the Rough: Season Twenty-one",
+    "points": 20
+  },
+  "3934": {
+    "name": "Ranked and Filed: Season Twenty-one",
+    "points": 20
+  },
+  "3935": {
+    "name": "Witness to the Stars",
+    "points": 10
+  },
+  "3936": {
+    "name": "Assistant Manager",
+    "points": 10
+  },
+  "3940": {
+    "name": "On the Other Side",
+    "points": 10
+  },
+  "3942": {
+    "name": "Trail to the Heavens",
+    "points": 20
+  },
+  "3944": {
+    "name": "On the Wing",
+    "points": 20
+  },
+  "3945": {
+    "name": "トモダチドコダ",
+    "points": 10
+  },
+  "3946": {
+    "name": "祝祭告げる鐘の音",
+    "points": 10
+  },
+  "3970": {
+    "name": "Denizens of Nowhere",
+    "points": 10
+  },
+  "3971": {
+    "name": "Denizens of Thavnair Margin",
+    "points": 10
+  },
+  "3972": {
+    "name": "Specters of Nowhere",
+    "points": 10
+  },
+  "3973": {
+    "name": "Specters of Thavnair Margin",
+    "points": 10
+  },
+  "3974": {
+    "name": "Near, Far, Wherever Fish Are IV",
+    "points": 20
+  },
+  "3975": {
+    "name": "What Even Is That",
+    "points": 10
+  },
+  "3976": {
+    "name": "What Did Stomatopods Do to You?",
+    "points": 10
+  },
+  "3977": {
+    "name": "Mapping the Realm: The Clyteum",
+    "points": 10
+  },
+  "3978": {
+    "name": "Mapping the Realm: Windurst: The Third Walk",
+    "points": 10
+  },
+  "3979": {
+    "name": "Nothing Out of Nothing",
+    "points": 10
+  },
+  "3980": {
+    "name": "The Pursuit of Emptiness",
+    "points": 5
+  },
+  "3981": {
+    "name": "I Found That: Miner IX",
+    "points": 10
+  },
+  "3982": {
+    "name": "I Found That: Botanist IX",
+    "points": 10
+  },
+  "3983": {
+    "name": "I Caught That IX",
+    "points": 10
+  },
+  "3986": {
+    "name": "Satisfaction Guaranteed: Aunt Tii's Tacos I",
+    "points": 5
+  },
+  "3987": {
+    "name": "Satisfaction Guaranteed: Aunt Tii's Tacos II",
+    "points": 5
+  },
+  "3988": {
+    "name": "Satisfaction Guaranteed: Aunt Tii's Tacos III",
+    "points": 5
+  },
+  "3989": {
+    "name": "Satisfaction Guaranteed: Aunt Tii's Tacos IV",
+    "points": 5
+  },
+  "3990": {
+    "name": "Satisfaction Guaranteed: Aunt Tii's Tacos V",
+    "points": 10
+  },
+  "3991": {
+    "name": "The Customer Is Always Right: Aunt Tii's Tacos I",
+    "points": 5
+  },
+  "3992": {
+    "name": "The Customer Is Always Right: Aunt Tii's Tacos II",
+    "points": 5
+  },
+  "3993": {
+    "name": "The Customer Is Always Right: Aunt Tii's Tacos III",
+    "points": 5
+  },
+  "3994": {
+    "name": "The Customer Is Always Right: Aunt Tii's Tacos IV",
+    "points": 5
+  },
+  "3995": {
+    "name": "The Customer Is Always Right: Aunt Tii's Tacos V",
+    "points": 5
+  },
+  "3996": {
+    "name": "The Customer Is Always Right: Aunt Tii's Tacos VI",
+    "points": 10
+  },
+  "4019": {
+    "name": "Shades' Treasury",
+    "points": 20
+  },
+  "4020": {
+    "name": "Pot in the Act",
+    "points": 20
+  },
+  "4021": {
+    "name": "...Riches Abound",
+    "points": 20
+  },
+  "4069": {
+    "name": "Son of a...",
+    "points": 10
   }
 }
