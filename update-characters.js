@@ -1,14 +1,17 @@
-import fetch from 'node-fetch';
-import * as cheerio from 'cheerio';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { fetchNewAchievements, loadCache } from './fetch-achievements.js';
+import { setTimeout as setTimeoutAsync } from 'timers/promises';
+
+import * as cheerio from 'cheerio';
+import fetch from 'node-fetch';
+
 import CONFIG from './config.js';
+import { fetchNewAchievements, loadCache } from './fetch-achievements.js';
 import { RELIC_WEAPONS, RELIC_TOOLS, checkRelicStageCompletion, getHighestStage, getBiggestStage } from './relic-definitions.js';
 
 const CHARACTERS = CONFIG.characters;
 
-async function fetchCharacterJobs(characterId) {
-  const url = `https://${CONFIG.lodestone.region}.finalfantasyxiv.com/lodestone/character/${characterId}/class_job/`;
+async function fetchCharacterData(characterId, existingData = null) {
+  const url = `https://${CONFIG.lodestone.region}.finalfantasyxiv.com/lodestone/character/${characterId}/`;
 
   try {
     const response = await fetch(url, {
@@ -18,7 +21,60 @@ async function fetchCharacterJobs(characterId) {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`[CHARACTER] HTTP error! status: ${response.status}`);
+    }
+
+    const html = await response.text();
+    const $ = cheerio.load(html);
+
+    // Extract character name, world, and image
+    const name = $('.frame__chara__name').text().trim();
+    const world = $('.frame__chara__world').text().trim();
+    let image = $('.js__image_popup').attr('href').trim();
+
+    if (image) {
+      // Remove query parameters from image URL to get a cleaner link
+      image = image.split('?')[0];
+    }
+
+    const characterData = {
+      id: characterId,
+      name,
+      world,
+      image
+    };
+
+    if (existingData) {
+      if (name !== existingData.name || world !== existingData.world) {
+        console.log(`[CHARACTER] Name or world changed: ${existingData.name} (${existingData.world}) -> ${name} (${world})`);
+      }
+    } else {
+      console.log(`[CHARACTER] New character detected: ${characterData.name} (${characterData.world})`);
+    }
+
+    return {
+      ...characterData,
+      jobs: await fetchCharacterJobs(characterData),
+      achievements: await fetchAchievementData(characterData)
+    };
+  } catch (error) {
+    console.error(`[CHARACTER] Error fetching character ${existingData ? `${existingData.name} (${existingData.world})` : characterId}:`, error);
+    return null;
+  }
+}
+
+async function fetchCharacterJobs(characterData) {
+  const url = `https://${CONFIG.lodestone.region}.finalfantasyxiv.com/lodestone/character/${characterData.id}/class_job/`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`[JOBS] HTTP error! status: ${response.status}`);
     }
 
     const html = await response.text();
@@ -120,7 +176,7 @@ async function fetchCharacterJobs(characterId) {
       }
     });
 
-    console.log(`Found ${jobs.combat.length} combat, ${jobs.crafters.length} crafter, ${jobs.gatherers.length} gatherer, ${jobs.phantom.length} phantom jobs for character ${characterId}`);
+    console.log(`[JOBS] Found ${jobs.combat.length} combat, ${jobs.crafters.length} crafter, ${jobs.gatherers.length} gatherer, ${jobs.phantom.length} phantom jobs`);
 
     // Sort by level descending
     jobs.combat.sort((a, b) => b.level - a.level);
@@ -130,7 +186,7 @@ async function fetchCharacterJobs(characterId) {
 
     return jobs;
   } catch (error) {
-    console.error(`Error fetching character ${characterId}:`, error);
+    console.error(`[JOBS] Error fetching jobs for character ${characterData.name} (${characterData.world}):`, error);
     return null;
   }
 }
@@ -167,6 +223,7 @@ function getJobAbbr(jobName) {
     'Pugilist': 'PGL',
     'Lancer': 'LNC',
     'Rogue': 'ROG',
+    'Beastmaster': 'BST',
 
     // Ranged Physical DPS
     'Bard': 'BRD',
@@ -296,17 +353,16 @@ function analyzeRelicProgress(characterAchievements) {
   return relics;
 }
 
-async function fetchAchievementData(characterId) {
+async function fetchAchievementData(characterData) {
   try {
-    console.log(`Fetching achievement data for character ${characterId}...`);
-    const result = await fetchNewAchievements(characterId, CONFIG.lodestone.region);
+    const result = await fetchNewAchievements(characterData.id, CONFIG.lodestone.region);
 
     if (result && result.total > 0) {
-      console.log(`✓ Achievement points fetched for character ${characterId}: ${result.totalPoints} (${result.total} achievements)`);
+      console.log(`[ACHIEVEMENTS] ✓ Achievement points fetched: ${result.totalPoints} (${result.total} achievements)`);
 
       // Load full achievement cache to analyze relics
       const cache = loadCache();
-      const charKey = `${characterId}-${CONFIG.lodestone.region}`;
+      const charKey = `${characterData.id}-${CONFIG.lodestone.region}`;
       const characterAchievements = cache[charKey]?.achievements || [];
 
       // Analyze relic progress
@@ -321,10 +377,10 @@ async function fetchAchievementData(characterId) {
       };
     }
 
-    console.log(`No achievement data found for character ${characterId}`);
+    console.log(`[ACHIEVEMENTS] No achievement data found`);
     return null;
   } catch (error) {
-    console.error(`Error fetching achievements for character ${characterId}:`, error);
+    console.error(`[ACHIEVEMENTS] Error fetching achievements:`, error);
     return null;
   }
 }
@@ -407,36 +463,48 @@ async function updateAllCharacters() {
     }
   } else {
     console.log('Fetching character data from Lodestone...');
+    console.log('');
 
-    for (const char of CHARACTERS) {
-      console.log(`Fetching data for ${char.name} (${char.world})...`);
-      const jobs = await fetchCharacterJobs(char.id);
-      const achievements = await fetchAchievementData(char.id);
+    for (const charId of CHARACTERS) {
+      // Find existing character data by ID
+      const existingCharData = existingData.find(c => c.id === charId);
 
-      if (jobs) {
+      if (existingCharData) {
+        console.log(`==== Fetching data for ${existingCharData.name} (${existingCharData.world}) ====`);
+      } else {
+        console.log(`==== Fetching data for new character ID ${charId} ====`);
+      }
+
+      const characterData = await fetchCharacterData(charId, existingCharData);
+      if (characterData) {
+        const jobs = characterData.jobs;
+        const achievements = characterData.achievements;
+
         const newCharData = {
-          ...char,
+          id: charId,
+          name: characterData.name,
+          world: characterData.world,
+          image: characterData.image,
           jobs,
           achievements
         };
 
-        // Find existing character data by ID
-        const existingChar = existingData.find(c => c.id === char.id);
-
         // Only update timestamp if data has changed
-        if (existingChar && !hasDataChanged(existingChar, newCharData)) {
-          newCharData.lastUpdated = existingChar.lastUpdated;
-          console.log(`No changes detected for ${char.name}, keeping existing timestamp`);
+        if (existingCharData && !hasDataChanged(existingCharData, newCharData)) {
+          newCharData.lastUpdated = existingCharData.lastUpdated;
+          console.log(`No changes detected for ${characterData.name}, keeping existing timestamp`);
         } else {
           newCharData.lastUpdated = new Date().toISOString();
-          console.log(`Data changed for ${char.name}, updating timestamp`);
+          console.log(`Data changed for ${characterData.name}, updating timestamp`);
         }
 
         updatedCharacters.push(newCharData);
       }
 
+      console.log('');
+
       // Add delay to be respectful to the server
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await setTimeoutAsync(2000);
     }
   }
 

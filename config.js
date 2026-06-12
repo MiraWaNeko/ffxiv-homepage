@@ -23,26 +23,8 @@ const CONFIG = {
   // Add your FFXIV characters here. You can find character IDs in the Lodestone URL.
   // Example: https://na.finalfantasyxiv.com/lodestone/character/24921505/
   //          The character ID is: 24921505
-  //
-  // To get the character image URL:
-  // 1. Visit your character's Lodestone page
-  // 2. Right-click on the character portrait
-  // 3. Select "Copy Image Address"
   // ==========================================================================
-  characters: [
-    {
-      id: '24921505',
-      name: 'Mira Wa\'neko',
-      world: 'Diabolos [Crystal]',
-      image: 'https://img2.finalfantasyxiv.com/f/7c13a0269a6d7953946aff5be6ecff69_7b33d33ae3ecb996f778a5f67a6a0af6fl0.jpg?1768586024'
-    },
-    {
-      id: '24387385',
-      name: 'Mira Wa\'neko',
-      world: 'Maduin [Dynamis]',
-      image: 'https://img2.finalfantasyxiv.com/f/e5de5126497a6bf816908d12fdb2e908_c274370774c6bc3483cc8740805f41bcfl0.jpg?1768583610'
-    }
-  ],
+  characters: ['24921505', '24387385'], // Add more character IDs as needed
 
   // ==========================================================================
   // LODESTONE SETTINGS
