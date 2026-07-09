@@ -205,6 +205,16 @@ function renderRelicSection(relics) {
   return relicsHTML;
 }
 
+// Format an ISO date string into a short display date (e.g. "Jun 15, 2024")
+function formatEarnedDate(isoString) {
+  if (!isoString) return null;
+  return new Date(isoString).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+}
+
 function renderCharacterCard(character, index) {
   const { id, name, world, image, jobs, achievements, lastUpdated } = character;
   const shouldReverse = index % 2 === 1;
@@ -327,6 +337,17 @@ function renderCharacterCard(character, index) {
         `
       : '';
 
+    const firstEarned = formatEarnedDate(achievements.firstEarnedAt);
+    const latestEarned = formatEarnedDate(achievements.latestEarnedAt);
+    const earnedDatesHTML = (firstEarned || latestEarned)
+      ? `
+          <div class="achievement-updated">
+            ${firstEarned ? `First achievement earned ${firstEarned}<br>` : ''}
+            ${latestEarned ? `Latest achievement earned ${latestEarned}` : ''}
+          </div>
+        `
+      : '';
+
     achievementsHTML = `
       <div class="achievement-badge">
         <div class="achievement-total">${achievements.allScore.toLocaleString()}</div>
@@ -335,6 +356,7 @@ function renderCharacterCard(character, index) {
           <div class="achievement-value">${achievements.allScore.toLocaleString()}</div>
           <div class="achievement-desc">All achievement points earned</div>
           ${baseScoreHTML}
+          ${earnedDatesHTML}
         </div>
       </div>
     `;

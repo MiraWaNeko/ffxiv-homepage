@@ -111,20 +111,32 @@ async function fetchAchievementPage(characterId, page, region = 'na') {
   const html = await response.text();
   const $ = cheerio.load(html);
 
-  const achievementIds = [];
+  const entries = [];
 
   $('a.entry__achievement').each((i, elem) => {
     const href = $(elem).attr('href');
-    if (href) {
-      // Extract ID from href like: /lodestone/character/24921505/achievement/detail/3764/
-      const match = href.match(/\/achievement\/detail\/(\d+)\//);
-      if (match) {
-        achievementIds.push(parseInt(match[1], 10));
+    if (!href) return;
+
+    // Extract ID from href like: /lodestone/character/24921505/achievement/detail/3764/
+    const match = href.match(/\/achievement\/detail\/(\d+)\//);
+    if (!match) return;
+
+    const id = parseInt(match[1], 10);
+
+    // The earned date is embedded as a unix timestamp passed to ldst_strftime()
+    let earnedAt = null;
+    const scriptText = $(elem).find('time.entry__activity__time script').html();
+    if (scriptText) {
+      const timestampMatch = scriptText.match(/ldst_strftime\((\d+),/);
+      if (timestampMatch) {
+        earnedAt = new Date(parseInt(timestampMatch[1], 10) * 1000).toISOString();
       }
     }
+
+    entries.push({ id, earnedAt });
   });
 
-  return achievementIds;
+  return entries;
 }
 
 // Fetch all new achievements for a character
@@ -135,12 +147,17 @@ async function fetchNewAchievements(characterId, region = 'na') {
   if (!cache[charKey]) {
     cache[charKey] = {
       achievements: [], // Array of achievement IDs
+      achievementDates: {}, // Map of achievement ID -> ISO date earned
       lastUpdated: null
     };
+  }
+  if (!cache[charKey].achievementDates) {
+    cache[charKey].achievementDates = {};
   }
 
   const existingAchievements = cache[charKey].achievements || [];
   const existingIds = new Set(existingAchievements);
+  const achievementDates = cache[charKey].achievementDates;
   const newAchievements = [];
   let page = 1;
   let foundExisting = false;
@@ -148,23 +165,32 @@ async function fetchNewAchievements(characterId, region = 'na') {
   console.log(`Fetching achievements for character ${characterId} (${region})...`);
   console.log(`Currently have ${existingIds.size} cached achievements`);
 
-  // Keep fetching pages until we find an achievement we've already seen
+  // Keep fetching pages until we find an achievement we've already seen AND already have a date for.
+  // This naturally backfills dates for achievements that were cached before date tracking existed.
   while (!foundExisting) {
     try {
-      const pageIds = await fetchAchievementPage(characterId, page, region);
+      const pageEntries = await fetchAchievementPage(characterId, page, region);
 
-      if (pageIds.length === 0) {
+      if (pageEntries.length === 0) {
         // No more achievements
         console.log('No more achievements found');
         break;
       }
 
-      for (const id of pageIds) {
-        if (existingIds.has(id)) {
+      for (const { id, earnedAt } of pageEntries) {
+        const alreadyKnown = existingIds.has(id);
+
+        if (alreadyKnown && achievementDates[id] !== undefined) {
           foundExisting = true;
           console.log(`Found existing achievement ${id}, stopping fetch`);
           break;
-        } else {
+        }
+
+        if (earnedAt) {
+          achievementDates[id] = earnedAt;
+        }
+
+        if (!alreadyKnown) {
           newAchievements.push(id);
           existingIds.add(id);
         }
@@ -190,8 +216,16 @@ async function fetchNewAchievements(characterId, region = 'na') {
   const totalPoints = allAchievements.reduce((sum, id) => sum + getAchievementPoints(id), 0);
   const { baseScore, excludedCount } = calculateBaseScore(allAchievements);
 
+  // Determine earliest/latest earned dates among achievements we have dates for
+  const earnedDates = allAchievements.map(id => achievementDates[id]).filter(Boolean);
+  const firstEarnedAt = earnedDates.length ? earnedDates.reduce((a, b) => (a < b ? a : b)) : null;
+  const latestEarnedAt = earnedDates.length ? earnedDates.reduce((a, b) => (a > b ? a : b)) : null;
+
   // Update cache
   cache[charKey].achievements = allAchievements;
+  cache[charKey].achievementDates = achievementDates;
+  cache[charKey].totalPoints = totalPoints;
+  cache[charKey].baseScore = baseScore;
   cache[charKey].lastUpdated = new Date().toISOString();
   saveCache(cache);
 
@@ -201,7 +235,9 @@ async function fetchNewAchievements(characterId, region = 'na') {
     newAchievements: newAchievements,
     totalPoints,
     baseScore,
-    timeLimitedCount: excludedCount
+    timeLimitedCount: excludedCount,
+    firstEarnedAt,
+    latestEarnedAt
   };
 }
 

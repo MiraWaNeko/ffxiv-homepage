@@ -373,7 +373,9 @@ async function fetchAchievementData(characterData) {
       return {
         allScore: result.totalPoints,
         baseScore: result.baseScore,
-        relics: relics
+        relics: relics,
+        firstEarnedAt: result.firstEarnedAt,
+        latestEarnedAt: result.latestEarnedAt
       };
     }
 
@@ -422,10 +424,17 @@ function recalculateAchievements(characterId) {
 
   const relics = analyzeRelicProgress(charCache.achievements);
 
+  const achievementDates = charCache.achievementDates || {};
+  const earnedDates = charCache.achievements.map(id => achievementDates[id]).filter(Boolean);
+  const firstEarnedAt = earnedDates.length ? earnedDates.reduce((a, b) => (a < b ? a : b)) : null;
+  const latestEarnedAt = earnedDates.length ? earnedDates.reduce((a, b) => (a > b ? a : b)) : null;
+
   return {
     allScore: charCache.totalPoints || 0,
     baseScore: charCache.baseScore || 0,
-    relics: relics
+    relics: relics,
+    firstEarnedAt,
+    latestEarnedAt
   };
 }
 
