@@ -25,6 +25,7 @@
     --text-body: 212, 197, 160;
     --text-faint: 107, 93, 74;
     --text-badge: 84, 78, 63;
+    --track-empty: rgba(255, 255, 255, 0.15);
 }
 
 /* Light theme applied automatically when the system prefers light and the
@@ -47,6 +48,7 @@
         --text-body: 74, 60, 38;
         --text-faint: 138, 118, 88;
         --text-badge: 168, 155, 120;
+        --track-empty: rgba(0, 0, 0, 0.15);
     }
 }
 
@@ -67,6 +69,7 @@
     --text-body: 74, 60, 38;
     --text-faint: 138, 118, 88;
     --text-badge: 168, 155, 120;
+    --track-empty: rgba(0, 0, 0, 0.15);
 }
 
 body {
@@ -609,7 +612,7 @@ header h1::after {
 .relic-progress {
     width: 100%;
     height: 3px;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--track-empty);
     margin-top: 6px;
     overflow: hidden;
     border-radius: 2px;
@@ -726,7 +729,7 @@ header h1::after {
 .progress-bar-track {
     width: 100%;
     height: 6px;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--track-empty);
     overflow: hidden;
     border-radius: 3px;
 }
@@ -803,7 +806,7 @@ header h1::after {
     flex-basis: 0;
     min-width: 2px;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--track-empty);
     border-radius: 1px;
     overflow: hidden;
     position: relative;
@@ -829,15 +832,15 @@ header h1::after {
 
 .msq-patch-segment.current .msq-patch-fill {
     background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)));
-    box-shadow: 0 0 6px rgba(var(--gold), 0.6);
+    box-shadow: 0 0 6px rgba(var(--gold-light), 0.9);
 }
 
 @keyframes msq-pulse {
     0%, 100% {
-        box-shadow: 0 0 3px rgba(var(--gold), 0.5);
+        opacity: 0.6;
     }
     50% {
-        box-shadow: 0 0 10px 2px rgba(var(--gold-light), 0.9);
+        opacity: 1;
     }
 }
 
