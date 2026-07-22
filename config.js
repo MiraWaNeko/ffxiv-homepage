@@ -24,7 +24,7 @@ const CONFIG = {
   // Example: https://na.finalfantasyxiv.com/lodestone/character/24921505/
   //          The character ID is: 24921505
   // ==========================================================================
-  characters: ['24921505', '24387385'], // Add more character IDs as needed
+  characters: ['24921505', '24387385', '61617093'], // Add more character IDs as needed
 
   // ==========================================================================
   // LODESTONE SETTINGS
