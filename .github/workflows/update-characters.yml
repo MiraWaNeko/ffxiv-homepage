@@ -55,12 +55,14 @@ jobs:
           cp index.html deploy/
           cp config.js deploy/
           cp render.js deploy/
+          cp theme.js deploy/
           cp styles.css deploy/
           cp favicon.svg deploy/
           cp data.js deploy/
           cp achievements-cache.json deploy/
           cp achievements.json deploy/
           cp time-limited-achievements.json deploy/
+          cp patch-definitions.js deploy/
 
       - name: Check if deployment needed
         id: check_changes
