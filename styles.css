@@ -7,14 +7,76 @@
     box-sizing: border-box;
 }
 
+:root {
+    /* Color tokens (dark theme is the default) */
+    --gold: 201, 169, 97;
+    --gold-light: 244, 228, 188;
+    --bronze: 139, 115, 85;
+    --bg-radial-1: 30, 40, 80;
+    --bg-radial-2: 40, 30, 60;
+    --bg-body: 10, 14, 26;
+    --card-1: 15, 20, 25;
+    --card-2: 26, 31, 46;
+    --card-border: 42, 47, 63;
+    --surface-1: 20, 25, 35;
+    --surface-2: 15, 20, 30;
+    --surface-hover-1: 30, 35, 45;
+    --surface-hover-2: 25, 30, 40;
+    --text-body: 212, 197, 160;
+    --text-faint: 107, 93, 74;
+    --text-badge: 84, 78, 63;
+}
+
+/* Light theme applied automatically when the system prefers light and the
+   user hasn't explicitly picked dark, or explicitly via [data-theme="light"] */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --gold: 168, 124, 36;
+        --gold-light: 106, 70, 20;
+        --bronze: 120, 96, 64;
+        --bg-radial-1: 255, 246, 222;
+        --bg-radial-2: 232, 210, 165;
+        --bg-body: 244, 236, 216;
+        --card-1: 255, 251, 242;
+        --card-2: 240, 228, 198;
+        --card-border: 214, 196, 152;
+        --surface-1: 255, 253, 248;
+        --surface-2: 246, 236, 210;
+        --surface-hover-1: 255, 250, 235;
+        --surface-hover-2: 250, 240, 210;
+        --text-body: 74, 60, 38;
+        --text-faint: 138, 118, 88;
+        --text-badge: 168, 155, 120;
+    }
+}
+
+:root[data-theme="light"] {
+    --gold: 168, 124, 36;
+    --gold-light: 106, 70, 20;
+    --bronze: 120, 96, 64;
+    --bg-radial-1: 255, 246, 222;
+    --bg-radial-2: 232, 210, 165;
+    --bg-body: 244, 236, 216;
+    --card-1: 255, 251, 242;
+    --card-2: 240, 228, 198;
+    --card-border: 214, 196, 152;
+    --surface-1: 255, 253, 248;
+    --surface-2: 246, 236, 210;
+    --surface-hover-1: 255, 250, 235;
+    --surface-hover-2: 250, 240, 210;
+    --text-body: 74, 60, 38;
+    --text-faint: 138, 118, 88;
+    --text-badge: 168, 155, 120;
+}
+
 body {
     font-family: 'Lato', sans-serif;
-    background: #0a0e1a;
+    background: rgb(var(--bg-body));
     background-image:
-        radial-gradient(circle at 20% 50%, rgba(30, 40, 80, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(40, 30, 60, 0.2) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(var(--bg-radial-1), 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(var(--bg-radial-2), 0.2) 0%, transparent 50%);
     background-attachment: fixed;
-    color: #d4c5a0;
+    color: rgb(var(--text-body));
     min-height: 100vh;
     line-height: 1.6;
 }
@@ -41,16 +103,16 @@ header::after {
     transform: translateX(-50%);
     width: 300px;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #c9a961, transparent);
+    background: linear-gradient(90deg, transparent, rgb(var(--gold)), transparent);
 }
 
 header h1 {
     font-family: 'Cinzel', serif;
     font-size: 3.5rem;
     font-weight: 700;
-    color: #f4e4bc;
+    color: rgb(var(--gold-light));
     text-shadow:
-        0 0 20px rgba(201, 169, 97, 0.5),
+        0 0 20px rgba(var(--gold), 0.5),
         0 2px 4px rgba(0, 0, 0, 0.8);
     letter-spacing: 3px;
     margin-bottom: 10px;
@@ -60,8 +122,40 @@ header h1::before,
 header h1::after {
     content: '⟡';
     margin: 0 20px;
-    color: #c9a961;
+    color: rgb(var(--gold));
     font-size: 0.8em;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(var(--gold), 0.5);
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.9), rgba(var(--surface-2), 0.95));
+    color: rgb(var(--gold-light));
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.theme-toggle:hover {
+    border-color: rgb(var(--gold-light));
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(var(--gold), 0.3);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid rgb(var(--gold-light));
+    outline-offset: 2px;
 }
 
 /* Characters Grid */
@@ -76,15 +170,15 @@ header h1::after {
 }
 
 .character-card {
-    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
-    border: 3px solid #2a2f3f;
-    border-image: linear-gradient(135deg, #c9a961, #8b7355, #c9a961) 1;
+    background: linear-gradient(135deg, rgb(var(--card-1)) 0%, rgb(var(--card-2)) 100%);
+    border: 3px solid rgb(var(--card-border));
+    border-image: linear-gradient(135deg, rgb(var(--gold)), rgb(var(--bronze)), rgb(var(--gold))) 1;
     position: relative;
     transition: all 0.4s ease;
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.6),
-        0 0 60px rgba(201, 169, 97, 0),
-        inset 0 1px 0 rgba(201, 169, 97, 0.1);
+        0 0 60px rgba(var(--gold), 0),
+        inset 0 1px 0 rgba(var(--gold), 0.1);
     display: flex;
     flex-direction: row;
 }
@@ -96,7 +190,7 @@ header h1::after {
 
 .character-card.reverse .character-image {
     border-right: none;
-    border-left: 2px solid rgba(201, 169, 97, 0.3);
+    border-left: 2px solid rgba(var(--gold), 0.3);
 }
 
 .character-card::before {
@@ -106,7 +200,7 @@ header h1::after {
     left: 0;
     right: 0;
     bottom: 0;
-    border: 1px solid rgba(201, 169, 97, 0.2);
+    border: 1px solid rgba(var(--gold), 0.2);
     pointer-events: none;
     transition: all 0.4s ease;
 }
@@ -114,14 +208,14 @@ header h1::after {
 .character-card:hover {
     transform: translateY(-8px);
     box-shadow:
-        0 16px 48px rgba(201, 169, 97, 0.3),
-        0 0 60px rgba(201, 169, 97, 0.1),
-        inset 0 1px 0 rgba(201, 169, 97, 0.2);
-    border-image: linear-gradient(135deg, #f4e4bc, #c9a961, #f4e4bc) 1;
+        0 16px 48px rgba(var(--gold), 0.3),
+        0 0 60px rgba(var(--gold), 0.1),
+        inset 0 1px 0 rgba(var(--gold), 0.2);
+    border-image: linear-gradient(135deg, rgb(var(--gold-light)), rgb(var(--gold)), rgb(var(--gold-light))) 1;
 }
 
 .character-card:hover::before {
-    border-color: rgba(201, 169, 97, 0.4);
+    border-color: rgba(var(--gold), 0.4);
 }
 
 /* Corner Decorations */
@@ -132,7 +226,7 @@ header h1::after {
     left: 8px;
     right: 8px;
     bottom: 8px;
-    border: 1px solid rgba(201, 169, 97, 0.15);
+    border: 1px solid rgba(var(--gold), 0.15);
     pointer-events: none;
 }
 
@@ -148,7 +242,7 @@ header h1::after {
     align-items: center;
     justify-content: center;
     position: relative;
-    border-right: 2px solid rgba(201, 169, 97, 0.3);
+    border-right: 2px solid rgba(var(--gold), 0.3);
 }
 
 .character-image::before {
@@ -177,7 +271,7 @@ header h1::after {
 
 .character-info {
     padding: 30px;
-    background: linear-gradient(180deg, rgba(15, 20, 25, 0.8) 0%, rgba(10, 14, 26, 0.9) 100%);
+    background: linear-gradient(180deg, rgba(var(--card-1), 0.8) 0%, rgba(var(--bg-body), 0.9) 100%);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -187,7 +281,7 @@ header h1::after {
     font-family: 'Cinzel', serif;
     font-size: 2rem;
     font-weight: 600;
-    color: #f4e4bc;
+    color: rgb(var(--gold-light));
     margin-bottom: 10px;
     text-align: center;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
@@ -196,7 +290,7 @@ header h1::after {
 
 .character-world {
     font-size: 1.1rem;
-    color: #c9a961;
+    color: rgb(var(--gold));
     font-weight: 400;
     text-align: center;
     margin-bottom: 25px;
@@ -216,17 +310,17 @@ header h1::after {
 .achievement-total {
     font-family: 'Cinzel', serif;
     font-size: 1.5rem;
-    color: #f4e4bc;
+    color: rgb(var(--gold-light));
     font-weight: 700;
     text-shadow:
-        0 0 15px rgba(201, 169, 97, 0.6),
+        0 0 15px rgba(var(--gold), 0.6),
         0 2px 8px rgba(0, 0, 0, 0.8);
     padding: 12px 18px;
-    background: linear-gradient(135deg, rgba(20, 25, 35, 0.9), rgba(15, 20, 30, 0.95));
-    border: 2px solid rgba(201, 169, 97, 0.5);
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.9), rgba(var(--surface-2), 0.95));
+    border: 2px solid rgba(var(--gold), 0.5);
     box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(201, 169, 97, 0.2);
+        inset 0 1px 0 rgba(var(--gold), 0.2);
     transition: all 0.3s ease;
 }
 
@@ -246,12 +340,12 @@ header h1::after {
     top: 0;
     right: 0;
     padding: 15px 20px;
-    background: linear-gradient(135deg, rgba(20, 25, 35, 0.98), rgba(15, 20, 30, 0.98));
-    border: 2px solid rgba(201, 169, 97, 0.7);
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.98), rgba(var(--surface-2), 0.98));
+    border: 2px solid rgba(var(--gold), 0.7);
     box-shadow:
         0 8px 24px rgba(0, 0, 0, 0.8),
-        0 0 40px rgba(201, 169, 97, 0.3),
-        inset 0 1px 0 rgba(201, 169, 97, 0.3);
+        0 0 40px rgba(var(--gold), 0.3),
+        inset 0 1px 0 rgba(var(--gold), 0.3);
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s ease;
@@ -266,7 +360,7 @@ header h1::after {
 
 .achievement-hover .achievement-label {
     font-size: 0.7rem;
-    color: #c9a961;
+    color: rgb(var(--gold));
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -277,16 +371,16 @@ header h1::after {
 .achievement-hover .achievement-label.obtainable {
     margin-top: 15px;
     padding-top: 15px;
-    border-top: 1px solid rgba(201, 169, 97, 0.3);
+    border-top: 1px solid rgba(var(--gold), 0.3);
 }
 
 .achievement-hover .achievement-value {
     font-family: 'Cinzel', serif;
     font-size: 1.4rem;
-    color: #f4e4bc;
+    color: rgb(var(--gold-light));
     font-weight: 700;
     text-shadow:
-        0 0 10px rgba(201, 169, 97, 0.5),
+        0 0 10px rgba(var(--gold), 0.5),
         0 2px 6px rgba(0, 0, 0, 0.8);
     margin-bottom: 4px;
 }
@@ -297,7 +391,7 @@ header h1::after {
 
 .achievement-hover .achievement-desc {
     font-size: 0.65rem;
-    color: #8b7355;
+    color: rgb(var(--bronze));
     font-style: italic;
     margin-bottom: 8px;
     line-height: 1.3;
@@ -306,22 +400,22 @@ header h1::after {
 
 .achievement-hover .achievement-updated {
     font-size: 0.6rem;
-    color: #6b5d4a;
+    color: rgb(var(--text-faint));
     font-style: italic;
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid rgba(201, 169, 97, 0.2);
+    border-top: 1px solid rgba(var(--gold), 0.2);
     opacity: 0.8;
 }
 
 .last-updated {
     text-align: center;
     font-size: 0.7rem;
-    color: #6b5d4a;
+    color: rgb(var(--text-faint));
     font-style: italic;
     margin-top: 25px;
     padding-top: 15px;
-    border-top: 1px solid rgba(201, 169, 97, 0.1);
+    border-top: 1px solid rgba(var(--gold), 0.1);
     opacity: 0.7;
 }
 
@@ -333,15 +427,15 @@ header h1::after {
 .job-category {
     margin-bottom: 18px;
     padding: 12px;
-    background: rgba(201, 169, 97, 0.03);
-    border-left: 3px solid rgba(201, 169, 97, 0.4);
+    background: rgba(var(--gold), 0.03);
+    border-left: 3px solid rgba(var(--gold), 0.4);
     border-radius: 2px;
 }
 
 .job-category-title {
     font-family: 'Cinzel', serif;
     font-size: 0.9rem;
-    color: #c9a961;
+    color: rgb(var(--gold));
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -358,9 +452,9 @@ header h1::after {
 .job-badge {
     display: inline-flex;
     align-items: stretch;
-    background: linear-gradient(135deg, rgba(20, 25, 35, 0.5), rgba(15, 20, 30, 0.2));
-    border: 1px solid rgba(139, 115, 85, 0.2);
-    color: #544e3f;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.5), rgba(var(--surface-2), 0.2));
+    border: 1px solid rgba(var(--bronze), 0.2);
+    color: rgb(var(--text-badge));
     font-size: 0.85rem;
     font-weight: 400;
     transition: all 0.3s ease;
@@ -383,7 +477,7 @@ header h1::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-left: 1px solid rgba(139, 115, 85, 0.3);
+    border-left: 1px solid rgba(var(--bronze), 0.3);
     background: rgba(0, 0, 0, 0.2);
     min-width: 35px;
     font-weight: 600;
@@ -394,72 +488,72 @@ header h1::after {
 }
 
 .job-badge.in-progress {
-    background: linear-gradient(135deg, rgba(20, 25, 35, 0.8), rgba(15, 20, 30, 0.9));
-    border-color: rgba(139, 115, 85, 0.5);
-    color: #d4c5a0;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.8), rgba(var(--surface-2), 0.9));
+    border-color: rgba(var(--bronze), 0.5);
+    color: rgb(var(--text-body));
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .job-badge.in-progress .job-level {
-    border-left-color: rgba(139, 115, 85, 0.5);
+    border-left-color: rgba(var(--bronze), 0.5);
     background: rgba(0, 0, 0, 0.3);
 }
 
 .job-badge.in-progress:hover {
-    background: linear-gradient(135deg, rgba(30, 35, 45, 0.9), rgba(25, 30, 40, 1));
-    border-color: rgba(201, 169, 97, 0.6);
-    color: #f4e4bc;
+    background: linear-gradient(135deg, rgba(var(--surface-hover-1), 0.9), rgba(var(--surface-hover-2), 1));
+    border-color: rgba(var(--gold), 0.6);
+    color: rgb(var(--gold-light));
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(201, 169, 97, 0.2);
+    box-shadow: 0 4px 8px rgba(var(--gold), 0.2);
 }
 
 .job-badge.max-level {
-    background: linear-gradient(135deg, rgba(20, 25, 35, 0.8), rgba(15, 20, 30, 0.9));
-    border-color: rgba(139, 115, 85, 0.5);
-    color: #d4c5a0;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.8), rgba(var(--surface-2), 0.9));
+    border-color: rgba(var(--bronze), 0.5);
+    color: rgb(var(--text-body));
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .job-badge.max-level .job-level {
-    border-left-color: #c9a961;
-    background: linear-gradient(135deg, rgba(201, 169, 97, 0.25), rgba(139, 115, 85, 0.3));
-    color: #f4e4bc;
+    border-left-color: rgb(var(--gold));
+    background: linear-gradient(135deg, rgba(var(--gold), 0.25), rgba(var(--bronze), 0.3));
+    color: rgb(var(--gold-light));
     font-weight: 700;
-    box-shadow: 0 0 10px rgba(201, 169, 97, 0.2);
+    box-shadow: 0 0 10px rgba(var(--gold), 0.2);
 }
 
 .job-badge.max-level:hover {
-    background: linear-gradient(135deg, rgba(30, 35, 45, 0.9), rgba(25, 30, 40, 1));
-    border-color: rgba(201, 169, 97, 0.6);
+    background: linear-gradient(135deg, rgba(var(--surface-hover-1), 0.9), rgba(var(--surface-hover-2), 1));
+    border-color: rgba(var(--gold), 0.6);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(201, 169, 97, 0.2);
+    box-shadow: 0 4px 8px rgba(var(--gold), 0.2);
 }
 
 .job-badge.max-level:hover .job-level {
-    background: linear-gradient(135deg, rgba(201, 169, 97, 0.35), rgba(139, 115, 85, 0.4));
-    border-left-color: #f4e4bc;
-    box-shadow: 0 0 15px rgba(201, 169, 97, 0.3);
+    background: linear-gradient(135deg, rgba(var(--gold), 0.35), rgba(var(--bronze), 0.4));
+    border-left-color: rgb(var(--gold-light));
+    box-shadow: 0 0 15px rgba(var(--gold), 0.3);
 }
 
 /* Relic Section */
 .relic-section {
     margin-top: 25px;
     padding-top: 25px;
-    border-top: 2px solid rgba(201, 169, 97, 0.15);
+    border-top: 2px solid rgba(var(--gold), 0.15);
 }
 
 .relic-category {
     margin-bottom: 18px;
     padding: 12px;
-    background: rgba(201, 169, 97, 0.03);
-    border-left: 3px solid rgba(201, 169, 97, 0.4);
+    background: rgba(var(--gold), 0.03);
+    border-left: 3px solid rgba(var(--gold), 0.4);
     border-radius: 2px;
 }
 
 .relic-category-title {
     font-family: 'Cinzel', serif;
     font-size: 0.9rem;
-    color: #c9a961;
+    color: rgb(var(--gold));
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -478,9 +572,9 @@ header h1::after {
     flex-direction: column;
     align-items: center;
     padding: 10px 14px;
-    background: linear-gradient(135deg, rgba(20, 25, 35, 0.5), rgba(15, 20, 30, 0.2));
-    border: 1px solid rgba(139, 115, 85, 0.2);
-    color: #544e3f;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.5), rgba(var(--surface-2), 0.2));
+    border: 1px solid rgba(var(--bronze), 0.2);
+    color: rgb(var(--text-badge));
     font-size: 0.8rem;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
@@ -500,7 +594,7 @@ header h1::after {
 
 .relic-stage {
     font-size: 0.7rem;
-    color: #8b7355;
+    color: rgb(var(--bronze));
     font-style: italic;
     margin-bottom: 4px;
     text-align: center;
@@ -523,9 +617,9 @@ header h1::after {
 
 .relic-progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, #8b7355, #c9a961);
+    background: linear-gradient(90deg, rgb(var(--bronze)), rgb(var(--gold)));
     transition: width 0.5s ease;
-    box-shadow: 0 0 8px rgba(201, 169, 97, 0.5);
+    box-shadow: 0 0 8px rgba(var(--gold), 0.5);
 }
 
 /* Relic Badge States */
@@ -538,59 +632,59 @@ header h1::after {
 }
 
 .relic-badge.in-progress {
-    background: linear-gradient(135deg, rgba(20, 25, 35, 0.8), rgba(15, 20, 30, 0.9));
-    border-color: rgba(139, 115, 85, 0.5);
-    color: #d4c5a0;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.8), rgba(var(--surface-2), 0.9));
+    border-color: rgba(var(--bronze), 0.5);
+    color: rgb(var(--text-body));
 }
 
 .relic-badge.in-progress .relic-progress-bar {
-    background: linear-gradient(90deg, #c9a961, #f4e4bc);
-    box-shadow: 0 0 12px rgba(201, 169, 97, 0.7);
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)));
+    box-shadow: 0 0 12px rgba(var(--gold), 0.7);
 }
 
 .relic-badge.in-progress:hover {
-    background: linear-gradient(135deg, rgba(30, 35, 45, 0.9), rgba(25, 30, 40, 1));
-    border-color: rgba(201, 169, 97, 0.6);
-    color: #f4e4bc;
+    background: linear-gradient(135deg, rgba(var(--surface-hover-1), 0.9), rgba(var(--surface-hover-2), 1));
+    border-color: rgba(var(--gold), 0.6);
+    color: rgb(var(--gold-light));
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(201, 169, 97, 0.2);
+    box-shadow: 0 4px 8px rgba(var(--gold), 0.2);
 }
 
 .relic-badge.complete {
-    background: linear-gradient(135deg, rgba(201, 169, 97, 0.2), rgba(139, 115, 85, 0.3));
-    border-color: #c9a961;
-    color: #f4e4bc;
+    background: linear-gradient(135deg, rgba(var(--gold), 0.2), rgba(var(--bronze), 0.3));
+    border-color: rgb(var(--gold));
+    color: rgb(var(--gold-light));
     box-shadow:
         0 2px 4px rgba(0, 0, 0, 0.4),
-        0 0 15px rgba(201, 169, 97, 0.3);
+        0 0 15px rgba(var(--gold), 0.3);
 }
 
 .relic-badge.complete .relic-name {
-    color: #f4e4bc;
+    color: rgb(var(--gold-light));
 }
 
 .relic-badge.complete .relic-stage {
-    color: #c9a961;
+    color: rgb(var(--gold));
 }
 
 .relic-badge.complete .relic-completion {
-    color: #f4e4bc;
-    text-shadow: 0 0 10px rgba(201, 169, 97, 0.5);
+    color: rgb(var(--gold-light));
+    text-shadow: 0 0 10px rgba(var(--gold), 0.5);
 }
 
 .relic-badge.complete .relic-progress-bar {
-    background: linear-gradient(90deg, #c9a961, #f4e4bc, #c9a961);
-    box-shadow: 0 0 20px rgba(201, 169, 97, 0.8);
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)), rgb(var(--gold)));
+    box-shadow: 0 0 20px rgba(var(--gold), 0.8);
     animation: shimmer 2s infinite;
 }
 
 .relic-badge.complete:hover {
-    background: linear-gradient(135deg, rgba(201, 169, 97, 0.3), rgba(139, 115, 85, 0.4));
-    border-color: #f4e4bc;
+    background: linear-gradient(135deg, rgba(var(--gold), 0.3), rgba(var(--bronze), 0.4));
+    border-color: rgb(var(--gold-light));
     transform: translateY(-2px);
     box-shadow:
-        0 4px 8px rgba(201, 169, 97, 0.3),
-        0 0 25px rgba(201, 169, 97, 0.5);
+        0 4px 8px rgba(var(--gold), 0.3),
+        0 0 25px rgba(var(--gold), 0.5);
 }
 
 @keyframes shimmer {
@@ -602,19 +696,164 @@ header h1::after {
     }
 }
 
+/* Achievement Progress Badges (Main Scenario, Raid Clears, Mapping the Realm) */
+.progress-badge {
+    margin-top: 15px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.5), rgba(var(--surface-2), 0.2));
+    border: 1px solid rgba(var(--bronze), 0.2);
+    border-left: 3px solid rgba(var(--gold), 0.4);
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.progress-header {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 8px;
+}
+
+.progress-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: rgb(var(--gold));
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.progress-bar-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgb(var(--bronze)), rgb(var(--gold)));
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px rgba(var(--gold), 0.5);
+}
+
+.progress-badge.complete {
+    background: linear-gradient(135deg, rgba(var(--gold), 0.2), rgba(var(--bronze), 0.3));
+    border-color: rgb(var(--gold));
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(var(--gold), 0.3);
+}
+
+.progress-badge.complete .progress-title {
+    color: rgb(var(--gold-light));
+    text-shadow: 0 0 10px rgba(var(--gold), 0.5);
+}
+
+.progress-badge.complete .progress-bar-fill {
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)), rgb(var(--gold)));
+    box-shadow: 0 0 20px rgba(var(--gold), 0.8);
+    animation: shimmer 2s infinite;
+}
+
+/* MSQ Patch-Segmented Bar */
+.msq-expansion-labels {
+    display: flex;
+    margin-bottom: 4px;
+}
+
+.msq-expansion-label {
+    flex-basis: 0;
+    min-width: 0;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    color: rgb(var(--bronze));
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 2px;
+}
+
+.msq-patch-bar {
+    display: flex;
+    width: 100%;
+    height: 8px;
+}
+
+.msq-expansion-group {
+    display: flex;
+    flex-basis: 0;
+    gap: 2px;
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 1px solid rgba(var(--gold), 0.4);
+}
+
+.msq-expansion-group:last-child {
+    padding-right: 0;
+    margin-right: 0;
+    border-right: none;
+}
+
+.msq-patch-segment {
+    flex-basis: 0;
+    min-width: 2px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+}
+
+.msq-patch-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgb(var(--bronze)), rgb(var(--gold)));
+}
+
+.msq-patch-segment.upcoming {
+    opacity: 0.4;
+}
+
+.msq-patch-segment.complete .msq-patch-fill {
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)));
+    box-shadow: 0 0 6px rgba(var(--gold), 0.6);
+}
+
+.msq-patch-segment.current {
+    animation: msq-pulse 1.5s ease-in-out infinite;
+}
+
+.msq-patch-segment.current .msq-patch-fill {
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)));
+    box-shadow: 0 0 6px rgba(var(--gold), 0.6);
+}
+
+@keyframes msq-pulse {
+    0%, 100% {
+        box-shadow: 0 0 3px rgba(var(--gold), 0.5);
+    }
+    50% {
+        box-shadow: 0 0 10px 2px rgba(var(--gold-light), 0.9);
+    }
+}
+
 /* Social Links Section */
 .social-links {
     text-align: center;
     padding: 60px 40px;
     margin: 80px auto 60px;
     max-width: 800px;
-    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
-    border: 3px solid #2a2f3f;
-    border-image: linear-gradient(135deg, #c9a961, #8b7355, #c9a961) 1;
+    background: linear-gradient(135deg, rgb(var(--card-1)) 0%, rgb(var(--card-2)) 100%);
+    border: 3px solid rgb(var(--card-border));
+    border-image: linear-gradient(135deg, rgb(var(--gold)), rgb(var(--bronze)), rgb(var(--gold))) 1;
     position: relative;
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(201, 169, 97, 0.1);
+        inset 0 1px 0 rgba(var(--gold), 0.1);
 }
 
 .social-links::before {
@@ -624,7 +863,7 @@ header h1::after {
     left: 8px;
     right: 8px;
     bottom: 8px;
-    border: 1px solid rgba(201, 169, 97, 0.15);
+    border: 1px solid rgba(var(--gold), 0.15);
     pointer-events: none;
 }
 
@@ -632,7 +871,7 @@ header h1::after {
     font-family: 'Cinzel', serif;
     font-size: 2rem;
     font-weight: 600;
-    color: #f4e4bc;
+    color: rgb(var(--gold-light));
     margin-bottom: 40px;
     letter-spacing: 2px;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
@@ -650,9 +889,9 @@ header h1::after {
     align-items: center;
     gap: 12px;
     padding: 16px 32px;
-    background: linear-gradient(135deg, rgba(20, 25, 35, 0.8), rgba(15, 20, 30, 0.9));
-    border: 2px solid rgba(201, 169, 97, 0.5);
-    color: #d4c5a0;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.8), rgba(var(--surface-2), 0.9));
+    border: 2px solid rgba(var(--gold), 0.5);
+    color: rgb(var(--text-body));
     text-decoration: none;
     font-size: 1.1rem;
     font-weight: 600;
@@ -670,23 +909,23 @@ header h1::after {
     left: 4px;
     right: 4px;
     bottom: 4px;
-    border: 1px solid rgba(201, 169, 97, 0.2);
+    border: 1px solid rgba(var(--gold), 0.2);
     pointer-events: none;
     transition: all 0.4s ease;
 }
 
 .social-link:hover {
-    background: linear-gradient(135deg, rgba(201, 169, 97, 0.2), rgba(139, 115, 85, 0.3));
-    border-color: #f4e4bc;
-    color: #f4e4bc;
+    background: linear-gradient(135deg, rgba(var(--gold), 0.2), rgba(var(--bronze), 0.3));
+    border-color: rgb(var(--gold-light));
+    color: rgb(var(--gold-light));
     transform: translateY(-4px);
     box-shadow:
-        0 8px 24px rgba(201, 169, 97, 0.3),
-        0 0 30px rgba(201, 169, 97, 0.2);
+        0 8px 24px rgba(var(--gold), 0.3),
+        0 0 30px rgba(var(--gold), 0.2);
 }
 
 .social-link:hover::before {
-    border-color: rgba(244, 228, 188, 0.4);
+    border-color: rgba(var(--gold-light), 0.4);
 }
 
 .social-link svg {
@@ -699,8 +938,8 @@ footer {
     text-align: center;
     padding: 40px 0;
     margin-top: 60px;
-    border-top: 2px solid rgba(201, 169, 97, 0.2);
-    color: #8b7355;
+    border-top: 2px solid rgba(var(--gold), 0.2);
+    color: rgb(var(--bronze));
     font-size: 0.9rem;
 }
 
@@ -721,13 +960,13 @@ footer .attribution {
 }
 
 footer a {
-    color: #c9a961;
+    color: rgb(var(--gold));
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 footer a:hover {
-    color: #f4e4bc;
+    color: rgb(var(--gold-light));
     text-decoration: underline;
 }
 
@@ -787,7 +1026,7 @@ footer a:hover {
         height: 550px;
         border-right: none;
         border-left: none;
-        border-bottom: 2px solid rgba(201, 169, 97, 0.3);
+        border-bottom: 2px solid rgba(var(--gold), 0.3);
     }
 
     .character-info {
@@ -833,6 +1072,13 @@ footer a:hover {
     header h1::before,
     header h1::after {
         margin: 0 10px;
+    }
+
+    .theme-toggle {
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+        top: 0;
     }
 
     .character-image {

@@ -5,8 +5,9 @@ import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
 
 import CONFIG from './config.js';
-import { fetchNewAchievements, loadCache } from './fetch-achievements.js';
+import { fetchNewAchievements, loadCache, getMappingTheRealmIds, getRaidAchievementIds } from './fetch-achievements.js';
 import { RELIC_WEAPONS, RELIC_TOOLS, checkRelicStageCompletion, getHighestStage, getBiggestStage } from './relic-definitions.js';
+import { MSQ_ACHIEVEMENT_PATCHES, groupAchievementsByPatch, getSuppressedMSQIds } from './patch-definitions.js';
 
 const CHARACTERS = CONFIG.characters;
 
@@ -128,7 +129,6 @@ async function fetchCharacterJobs(characterData) {
         }
       }
 
-      // Include ALL jobs, even level 0 (unleveled jobs)
       if (jobName && jobName.length > 1) {
         // Skip if we've already added this job
         if (seenJobs.has(jobName)) {
@@ -175,6 +175,13 @@ async function fetchCharacterJobs(characterData) {
         }
       }
     });
+
+    // Drop untouched classes/jobs (level 0/"-" on Lodestone) — the renderer
+    // already falls back to level 0 for anything not in the stored list.
+    jobs.combat = jobs.combat.filter(j => j.level > 0);
+    jobs.crafters = jobs.crafters.filter(j => j.level > 0);
+    jobs.gatherers = jobs.gatherers.filter(j => j.level > 0);
+    jobs.phantom = jobs.phantom.filter(j => j.level > 0);
 
     console.log(`[JOBS] Found ${jobs.combat.length} combat, ${jobs.crafters.length} crafter, ${jobs.gatherers.length} gatherer, ${jobs.phantom.length} phantom jobs`);
 
@@ -276,6 +283,54 @@ function getJobEquivalent(className) {
   return classToJob[className] || className;
 }
 
+function analyzeAchievementSetProgress(characterAchievements, ids) {
+  const earned = new Set(characterAchievements.map(id => parseInt(id, 10)));
+  const completed = ids.filter(id => earned.has(id)).length;
+  const total = ids.length;
+
+  return {
+    completed,
+    total,
+    percentage: total > 0 ? Math.round((completed / total) * 100) : 0
+  };
+}
+
+// Overall MSQ progress plus a per-patch breakdown (chronological order), so
+// the UI can show a segmented bar sized by how many MSQ achievements shipped
+// in each patch. Achievements permanently unobtainable for this character
+// (e.g. the other two starting-city intro quests) are excluded from the
+// totals rather than counted as missing. The first not-yet-fully-cleared
+// patch is flagged `isCurrent` — assumes achievements are earned roughly in
+// release order, which holds for story milestones in practice.
+function analyzeMSQProgress(characterAchievements) {
+  const earned = new Set(characterAchievements.map(id => parseInt(id, 10)));
+  const suppressed = getSuppressedMSQIds(characterAchievements);
+  const groups = groupAchievementsByPatch(MSQ_ACHIEVEMENT_PATCHES)
+    .map(({ patch, ids }) => ({ patch, ids: ids.filter(id => !suppressed.has(id)) }))
+    .filter(({ ids }) => ids.length > 0);
+
+  let currentFound = false;
+  const patches = groups.map(({ patch, ids }) => {
+    const completed = ids.filter(id => earned.has(id)).length;
+    const total = ids.length;
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+    const isCurrent = !currentFound && percentage < 100;
+    if (isCurrent) currentFound = true;
+
+    return { patch, completed, total, percentage, isCurrent };
+  });
+
+  const completed = patches.reduce((sum, p) => sum + p.completed, 0);
+  const total = patches.reduce((sum, p) => sum + p.total, 0);
+
+  return {
+    completed,
+    total,
+    percentage: total > 0 ? Math.round((completed / total) * 100) : 0,
+    patches
+  };
+}
+
 function analyzeRelicProgress(characterAchievements) {
   const relics = {
     weapons: {},
@@ -365,15 +420,21 @@ async function fetchAchievementData(characterData) {
       const charKey = `${characterData.id}-${CONFIG.lodestone.region}`;
       const characterAchievements = cache[charKey]?.achievements || [];
 
-      // Analyze relic progress
+      // Analyze relic, exploration, MSQ, and raid progress
       const relics = analyzeRelicProgress(characterAchievements);
+      const exploration = analyzeAchievementSetProgress(characterAchievements, getMappingTheRealmIds());
+      const msq = analyzeMSQProgress(characterAchievements);
+      const raids = analyzeAchievementSetProgress(characterAchievements, getRaidAchievementIds());
 
       // Achievement IDs are stored in achievements-cache.json
-      // We store scores and relic progress in data.js
+      // We store scores and progress breakdowns in data.js
       return {
         allScore: result.totalPoints,
         baseScore: result.baseScore,
         relics: relics,
+        exploration: exploration,
+        msq: msq,
+        raids: raids,
         firstEarnedAt: result.firstEarnedAt,
         latestEarnedAt: result.latestEarnedAt
       };
@@ -423,6 +484,9 @@ function recalculateAchievements(characterId) {
   }
 
   const relics = analyzeRelicProgress(charCache.achievements);
+  const exploration = analyzeAchievementSetProgress(charCache.achievements, getMappingTheRealmIds());
+  const msq = analyzeMSQProgress(charCache.achievements);
+  const raids = analyzeAchievementSetProgress(charCache.achievements, getRaidAchievementIds());
 
   const achievementDates = charCache.achievementDates || {};
   const earnedDates = charCache.achievements.map(id => achievementDates[id]).filter(Boolean);
@@ -433,6 +497,9 @@ function recalculateAchievements(characterId) {
     allScore: charCache.totalPoints || 0,
     baseScore: charCache.baseScore || 0,
     relics: relics,
+    exploration: exploration,
+    msq: msq,
+    raids: raids,
     firstEarnedAt,
     latestEarnedAt
   };

@@ -25,6 +25,32 @@ function getAchievementPoints(achievementId) {
   return db[achievementId]?.points || 0;
 }
 
+// IDs of all "Mapping the Realm" (zone/duty exploration) achievements
+let mappingTheRealmIds = null;
+function getMappingTheRealmIds() {
+  if (!mappingTheRealmIds) {
+    const db = loadAchievementDatabase();
+    mappingTheRealmIds = Object.keys(db)
+      .filter(id => db[id].kind === 'Exploration' && db[id].name?.startsWith('Mapping the Realm'))
+      .map(id => parseInt(id, 10));
+  }
+  return mappingTheRealmIds;
+}
+
+// IDs of raid achievements, excluding repeat-clear tiers (e.g. "...II"/"...III"
+// for clearing the same raid 10x/50x) so only the first clear of each raid
+// (normal and savage counted separately) counts toward progress.
+let raidIds = null;
+function getRaidAchievementIds() {
+  if (!raidIds) {
+    const db = loadAchievementDatabase();
+    raidIds = Object.keys(db)
+      .filter(id => db[id].kind === 'Battle' && db[id].category === 'Raids' && !/\s(II|III)$/.test(db[id].name || ''))
+      .map(id => parseInt(id, 10));
+  }
+  return raidIds;
+}
+
 // Load existing cache
 function loadCache() {
   if (existsSync(CACHE_FILE)) {
@@ -241,4 +267,4 @@ async function fetchNewAchievements(characterId, region = 'na') {
   };
 }
 
-export { fetchNewAchievements, loadCache, calculateBaseScore };
+export { fetchNewAchievements, loadCache, calculateBaseScore, getMappingTheRealmIds, getRaidAchievementIds };

@@ -2,6 +2,7 @@ import characterData from './data.js';
 
 // Import configuration
 import CONFIG from './config.js';
+import { MSQ_EXPANSIONS } from './patch-definitions.js';
 
 // Define max levels for jobs that aren't 100
 const MAX_LEVELS = {
@@ -97,6 +98,33 @@ const JOB_ROLES = {
   ]
 };
 
+// Lodestone shows a class's precursor name (e.g. "Conjurer") until its
+// job is unlocked at level 30, at which point the row becomes the job
+// name (e.g. "White Mage") instead — the two never appear together.
+const JOB_BASE_CLASS = {
+  'Paladin': { name: 'Gladiator', abbr: 'GLA' },
+  'Warrior': { name: 'Marauder', abbr: 'MRD' },
+  'White Mage': { name: 'Conjurer', abbr: 'CNJ' },
+  'Scholar': { name: 'Arcanist', abbr: 'ACN' },
+  'Monk': { name: 'Pugilist', abbr: 'PGL' },
+  'Dragoon': { name: 'Lancer', abbr: 'LNC' },
+  'Ninja': { name: 'Rogue', abbr: 'ROG' },
+  'Bard': { name: 'Archer', abbr: 'ARC' },
+  'Black Mage': { name: 'Thaumaturge', abbr: 'THM' },
+  'Summoner': { name: 'Arcanist', abbr: 'ACN' }
+};
+
+// Before a job unlocks, show the precursor class's abbreviation and level
+// instead of the job's — e.g. "CNJ 23" rather than "WHM 23".
+function getJobDisplay(jobs, jobName, jobAbbr) {
+  const job = jobs.find(j => j.name === jobName);
+  if (job) return { abbr: jobAbbr, level: job.level };
+
+  const base = JOB_BASE_CLASS[jobName];
+  const baseJob = base && jobs.find(j => j.name === base.name);
+  return baseJob ? { abbr: base.abbr, level: baseJob.level } : { abbr: jobAbbr, level: 0 };
+}
+
 function getJobLevel(jobs, jobName) {
   const job = jobs.find(j => j.name === jobName);
   return job ? job.level : 0;
@@ -141,7 +169,7 @@ function renderRelicBadge(relicData, type = 'weapon') {
     ${relicData.stages.map(stage => {
       const stagePercentage = stage.total > 0 ? Math.round((stage.completed / stage.total) * 100) : 0;
       return `
-        <div class="relic-progress-bar-container" title="${stage.name}: ${stage.completed}/${stage.total} completed (${stagePercentage}%)">
+        <div class="relic-progress-bar-container" title="${stage.name}">
           <div class="relic-progress"><div class="relic-progress-bar" style="width: ${stagePercentage}%"></div></div>
           <div class="relic-progress-bar-label">${stage.name}</div>
         </div>
@@ -155,6 +183,82 @@ function renderRelicBadge(relicData, type = 'weapon') {
       ${stageInfo}
       <div class="relic-completion">${completed}/${total}</div>
       ${progressBars}
+    </div>
+  `;
+}
+
+function renderProgressBadge(title, data) {
+  if (!data || data.total === 0) return '';
+
+  const { completed, total, percentage } = data;
+  const badgeClass = percentage === 100 ? 'progress-badge complete' : 'progress-badge';
+
+  return `
+    <div class="${badgeClass}">
+      <div class="progress-header">
+        <span class="progress-title">${title}</span>
+      </div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width: ${percentage}%"></div></div>
+    </div>
+  `;
+}
+
+// Folds chronologically-sorted patch entries (e.g. "2.0", "2.2", "3.0", ...)
+// into contiguous expansion buckets (2.x, 3.x, ...) for grouping the bar.
+function groupPatchesByExpansion(patches) {
+  const groups = [];
+
+  for (const p of patches) {
+    const major = p.patch.split('.')[0];
+    const lastGroup = groups[groups.length - 1];
+
+    if (lastGroup && lastGroup.major === major) {
+      lastGroup.patches.push(p);
+      lastGroup.total += p.total;
+    } else {
+      groups.push({ major, patches: [p], total: p.total });
+    }
+  }
+
+  return groups;
+}
+
+// MSQ progress as a bar segmented by patch, sized by how many MSQ
+// achievements shipped in that patch and grouped by expansion. Segments
+// before the current one are solid (fully cleared); the first not-yet-cleared
+// patch pulses to mark it as the "next" one; everything after sits dim and
+// unfilled.
+function renderMSQProgressBar(msq) {
+  if (!msq || msq.total === 0 || !msq.patches || msq.patches.length === 0) return '';
+
+  const { completed, total } = msq;
+  const badgeClass = completed === total ? 'progress-badge complete' : 'progress-badge';
+  const expansionGroups = groupPatchesByExpansion(msq.patches);
+
+  const labelsHTML = expansionGroups.map(g => {
+    const expansion = MSQ_EXPANSIONS[g.major];
+    return `<span class="msq-expansion-label" style="flex-grow: ${g.total}" title="${expansion?.name || g.major}">${expansion?.abbr || g.major}</span>`;
+  }).join('');
+
+  const groupsHTML = expansionGroups.map(g => {
+    const segmentsHTML = g.patches.map(p => {
+      const stateClass = p.percentage === 100 ? 'complete' : p.isCurrent ? 'current' : 'upcoming';
+      return `
+        <div class="msq-patch-segment ${stateClass}" style="flex-grow: ${p.total}" title="Patch ${p.patch}">
+          <div class="msq-patch-fill" style="width: ${p.percentage}%"></div>
+        </div>
+      `;
+    }).join('');
+    return `<div class="msq-expansion-group" style="flex-grow: ${g.total}">${segmentsHTML}</div>`;
+  }).join('');
+
+  return `
+    <div class="${badgeClass}" title="Main Scenario">
+      <div class="progress-header">
+        <span class="progress-title">Main Scenario</span>
+      </div>
+      <div class="msq-expansion-labels">${labelsHTML}</div>
+      <div class="msq-patch-bar">${groupsHTML}</div>
     </div>
   `;
 }
@@ -241,9 +345,9 @@ function renderCharacterCard(character, index) {
       <div class="job-category-title">Tanks</div>
       <div class="job-list">
         ${JOB_ROLES.tanks.map(job => {
-          const level = getJobLevel(allJobs, job.name);
+          const { abbr, level } = getJobDisplay(allJobs, job.name, job.abbr);
           const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(job.abbr, level, maxLevel);
+          return renderJobBadge(abbr, level, maxLevel);
         }).join('')}
       </div>
     </div>
@@ -255,9 +359,9 @@ function renderCharacterCard(character, index) {
       <div class="job-category-title">Healers</div>
       <div class="job-list">
         ${JOB_ROLES.healers.map(job => {
-          const level = getJobLevel(allJobs, job.name);
+          const { abbr, level } = getJobDisplay(allJobs, job.name, job.abbr);
           const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(job.abbr, level, maxLevel);
+          return renderJobBadge(abbr, level, maxLevel);
         }).join('')}
       </div>
     </div>
@@ -269,9 +373,9 @@ function renderCharacterCard(character, index) {
       <div class="job-category-title">DPS</div>
       <div class="job-list">
         ${JOB_ROLES.dps.map(job => {
-          const level = getJobLevel(allJobs, job.name);
+          const { abbr, level } = getJobDisplay(allJobs, job.name, job.abbr);
           const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(job.abbr, level, maxLevel);
+          return renderJobBadge(abbr, level, maxLevel);
         }).join('')}
       </div>
     </div>
@@ -362,8 +466,11 @@ function renderCharacterCard(character, index) {
     `;
   }
 
-  // Render relic section if we have achievement data with relics
+  // Render relic and achievement-set progress if we have data for them
   const relicHTML = achievements && achievements.relics ? renderRelicSection(achievements.relics) : '';
+  const msqHTML = achievements ? renderMSQProgressBar(achievements.msq) : '';
+  const raidsHTML = achievements ? renderProgressBadge('Raid Clears', achievements.raids) : '';
+  const explorationHTML = achievements ? renderProgressBadge('Mapping the Realm', achievements.exploration) : '';
 
   const infoHTML = `
     <div class="character-info">
@@ -372,6 +479,8 @@ function renderCharacterCard(character, index) {
       <div class="job-categories">
         ${jobCategoriesHTML}
       </div>
+      ${msqHTML}
+      ${explorationHTML}
       ${relicHTML}
       <div class="last-updated">Last updated: ${formattedDate}</div>
     </div>
