@@ -1,0 +1,1142 @@
+/* FFXIV-Themed Styling */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color tokens (dark theme is the default) */
+    --gold: 201, 169, 97;
+    --gold-light: 244, 228, 188;
+    --bronze: 139, 115, 85;
+    --bg-radial-1: 30, 40, 80;
+    --bg-radial-2: 40, 30, 60;
+    --bg-body: 10, 14, 26;
+    --card-1: 15, 20, 25;
+    --card-2: 26, 31, 46;
+    --card-border: 42, 47, 63;
+    --surface-1: 20, 25, 35;
+    --surface-2: 15, 20, 30;
+    --surface-hover-1: 30, 35, 45;
+    --surface-hover-2: 25, 30, 40;
+    --text-body: 212, 197, 160;
+    --text-faint: 107, 93, 74;
+    --text-badge: 84, 78, 63;
+    --track-empty: rgba(255, 255, 255, 0.15);
+}
+
+/* Light theme applied automatically when the system prefers light and the
+   user hasn't explicitly picked dark, or explicitly via [data-theme="light"] */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --gold: 168, 124, 36;
+        --gold-light: 106, 70, 20;
+        --bronze: 120, 96, 64;
+        --bg-radial-1: 255, 246, 222;
+        --bg-radial-2: 232, 210, 165;
+        --bg-body: 244, 236, 216;
+        --card-1: 255, 251, 242;
+        --card-2: 240, 228, 198;
+        --card-border: 214, 196, 152;
+        --surface-1: 255, 253, 248;
+        --surface-2: 246, 236, 210;
+        --surface-hover-1: 255, 250, 235;
+        --surface-hover-2: 250, 240, 210;
+        --text-body: 74, 60, 38;
+        --text-faint: 138, 118, 88;
+        --text-badge: 168, 155, 120;
+        --track-empty: rgba(0, 0, 0, 0.15);
+    }
+}
+
+:root[data-theme="light"] {
+    --gold: 168, 124, 36;
+    --gold-light: 106, 70, 20;
+    --bronze: 120, 96, 64;
+    --bg-radial-1: 255, 246, 222;
+    --bg-radial-2: 232, 210, 165;
+    --bg-body: 244, 236, 216;
+    --card-1: 255, 251, 242;
+    --card-2: 240, 228, 198;
+    --card-border: 214, 196, 152;
+    --surface-1: 255, 253, 248;
+    --surface-2: 246, 236, 210;
+    --surface-hover-1: 255, 250, 235;
+    --surface-hover-2: 250, 240, 210;
+    --text-body: 74, 60, 38;
+    --text-faint: 138, 118, 88;
+    --text-badge: 168, 155, 120;
+    --track-empty: rgba(0, 0, 0, 0.15);
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background: rgb(var(--bg-body));
+    background-image:
+        radial-gradient(circle at 20% 50%, rgba(var(--bg-radial-1), 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(var(--bg-radial-2), 0.2) 0%, transparent 50%);
+    background-attachment: fixed;
+    color: rgb(var(--text-body));
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding: 60px 0 40px;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgb(var(--gold)), transparent);
+}
+
+header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: rgb(var(--gold-light));
+    text-shadow:
+        0 0 20px rgba(var(--gold), 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.8);
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+header h1::before,
+header h1::after {
+    content: '⟡';
+    margin: 0 20px;
+    color: rgb(var(--gold));
+    font-size: 0.8em;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(var(--gold), 0.5);
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.9), rgba(var(--surface-2), 0.95));
+    color: rgb(var(--gold-light));
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.theme-toggle:hover {
+    border-color: rgb(var(--gold-light));
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(var(--gold), 0.3);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid rgb(var(--gold-light));
+    outline-offset: 2px;
+}
+
+/* Characters Grid */
+.characters-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 80px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.character-card {
+    background: linear-gradient(135deg, rgb(var(--card-1)) 0%, rgb(var(--card-2)) 100%);
+    border: 3px solid rgb(var(--card-border));
+    border-image: linear-gradient(135deg, rgb(var(--gold)), rgb(var(--bronze)), rgb(var(--gold))) 1;
+    position: relative;
+    transition: all 0.4s ease;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.6),
+        0 0 60px rgba(var(--gold), 0),
+        inset 0 1px 0 rgba(var(--gold), 0.1);
+    display: flex;
+    flex-direction: row;
+}
+
+/* Reverse layout on large screens only */
+.character-card.reverse {
+    flex-direction: row-reverse;
+}
+
+.character-card.reverse .character-image {
+    border-right: none;
+    border-left: 2px solid rgba(var(--gold), 0.3);
+}
+
+.character-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid rgba(var(--gold), 0.2);
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+
+.character-card:hover {
+    transform: translateY(-8px);
+    box-shadow:
+        0 16px 48px rgba(var(--gold), 0.3),
+        0 0 60px rgba(var(--gold), 0.1),
+        inset 0 1px 0 rgba(var(--gold), 0.2);
+    border-image: linear-gradient(135deg, rgb(var(--gold-light)), rgb(var(--gold)), rgb(var(--gold-light))) 1;
+}
+
+.character-card:hover::before {
+    border-color: rgba(var(--gold), 0.4);
+}
+
+/* Corner Decorations */
+.character-card::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 1px solid rgba(var(--gold), 0.15);
+    pointer-events: none;
+}
+
+.character-image {
+    width: 400px;
+    min-width: 400px;
+    height: auto;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgba(10, 14, 26, 0.4) 0%, rgba(10, 14, 26, 0.8) 100%),
+        #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-right: 2px solid rgba(var(--gold), 0.3);
+}
+
+.character-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(10, 14, 26, 0.6) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.character-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    filter: brightness(1.05) contrast(1.05);
+}
+
+.character-card:hover .character-image img {
+    transform: scale(1.05);
+}
+
+.character-info {
+    padding: 30px;
+    background: linear-gradient(180deg, rgba(var(--card-1), 0.8) 0%, rgba(var(--bg-body), 0.9) 100%);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.character-name {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: rgb(var(--gold-light));
+    margin-bottom: 10px;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    letter-spacing: 1px;
+}
+
+.character-world {
+    font-size: 1.1rem;
+    color: rgb(var(--gold));
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.achievement-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    cursor: help;
+}
+
+.achievement-total {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: rgb(var(--gold-light));
+    font-weight: 700;
+    text-shadow:
+        0 0 15px rgba(var(--gold), 0.6),
+        0 2px 8px rgba(0, 0, 0, 0.8);
+    padding: 12px 18px;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.9), rgba(var(--surface-2), 0.95));
+    border: 2px solid rgba(var(--gold), 0.5);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(var(--gold), 0.2);
+    transition: all 0.3s ease;
+}
+
+.achievement-total::before {
+    content: '🏆 ';
+    font-size: 1.2rem;
+    margin-right: 8px;
+}
+
+.achievement-badge:hover .achievement-total {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.achievement-hover {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.98), rgba(var(--surface-2), 0.98));
+    border: 2px solid rgba(var(--gold), 0.7);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(var(--gold), 0.3),
+        inset 0 1px 0 rgba(var(--gold), 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    white-space: nowrap;
+}
+
+.achievement-badge:hover .achievement-hover {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.achievement-hover .achievement-label {
+    font-size: 0.7rem;
+    color: rgb(var(--gold));
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    margin-bottom: 5px;
+}
+
+.achievement-hover .achievement-label.obtainable {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(var(--gold), 0.3);
+}
+
+.achievement-hover .achievement-value {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: rgb(var(--gold-light));
+    font-weight: 700;
+    text-shadow:
+        0 0 10px rgba(var(--gold), 0.5),
+        0 2px 6px rgba(0, 0, 0, 0.8);
+    margin-bottom: 4px;
+}
+
+.achievement-hover .achievement-value.obtainable {
+    margin-bottom: 4px;
+}
+
+.achievement-hover .achievement-desc {
+    font-size: 0.65rem;
+    color: rgb(var(--bronze));
+    font-style: italic;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    font-weight: 400;
+}
+
+.achievement-hover .achievement-updated {
+    font-size: 0.6rem;
+    color: rgb(var(--text-faint));
+    font-style: italic;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(var(--gold), 0.2);
+    opacity: 0.8;
+}
+
+.last-updated {
+    text-align: center;
+    font-size: 0.7rem;
+    color: rgb(var(--text-faint));
+    font-style: italic;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(var(--gold), 0.1);
+    opacity: 0.7;
+}
+
+.job-categories {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.job-category {
+    margin-bottom: 18px;
+    padding: 12px;
+    background: rgba(var(--gold), 0.03);
+    border-left: 3px solid rgba(var(--gold), 0.4);
+    border-radius: 2px;
+}
+
+.job-category-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: rgb(var(--gold));
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.job-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.job-badge {
+    display: inline-flex;
+    align-items: stretch;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.5), rgba(var(--surface-2), 0.2));
+    border: 1px solid rgba(var(--bronze), 0.2);
+    color: rgb(var(--text-badge));
+    font-size: 0.85rem;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.job-abbr {
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 45px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.job-level {
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid rgba(var(--bronze), 0.3);
+    background: rgba(0, 0, 0, 0.2);
+    min-width: 35px;
+    font-weight: 600;
+}
+
+.job-badge:hover {
+    cursor: default;
+}
+
+.job-badge.in-progress {
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.8), rgba(var(--surface-2), 0.9));
+    border-color: rgba(var(--bronze), 0.5);
+    color: rgb(var(--text-body));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.job-badge.in-progress .job-level {
+    border-left-color: rgba(var(--bronze), 0.5);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.job-badge.in-progress:hover {
+    background: linear-gradient(135deg, rgba(var(--surface-hover-1), 0.9), rgba(var(--surface-hover-2), 1));
+    border-color: rgba(var(--gold), 0.6);
+    color: rgb(var(--gold-light));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(var(--gold), 0.2);
+}
+
+.job-badge.max-level {
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.8), rgba(var(--surface-2), 0.9));
+    border-color: rgba(var(--bronze), 0.5);
+    color: rgb(var(--text-body));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.job-badge.max-level .job-level {
+    border-left-color: rgb(var(--gold));
+    background: linear-gradient(135deg, rgba(var(--gold), 0.25), rgba(var(--bronze), 0.3));
+    color: rgb(var(--gold-light));
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(var(--gold), 0.2);
+}
+
+.job-badge.max-level:hover {
+    background: linear-gradient(135deg, rgba(var(--surface-hover-1), 0.9), rgba(var(--surface-hover-2), 1));
+    border-color: rgba(var(--gold), 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(var(--gold), 0.2);
+}
+
+.job-badge.max-level:hover .job-level {
+    background: linear-gradient(135deg, rgba(var(--gold), 0.35), rgba(var(--bronze), 0.4));
+    border-left-color: rgb(var(--gold-light));
+    box-shadow: 0 0 15px rgba(var(--gold), 0.3);
+}
+
+/* Relic Section */
+.relic-section {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 2px solid rgba(var(--gold), 0.15);
+}
+
+.relic-category {
+    margin-bottom: 18px;
+    padding: 12px;
+    background: rgba(var(--gold), 0.03);
+    border-left: 3px solid rgba(var(--gold), 0.4);
+    border-radius: 2px;
+}
+
+.relic-category-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: rgb(var(--gold));
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.relic-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.relic-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.5), rgba(var(--surface-2), 0.2));
+    border: 1px solid rgba(var(--bronze), 0.2);
+    color: rgb(var(--text-badge));
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    min-width: 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.relic-name {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.relic-stage {
+    font-size: 0.7rem;
+    color: rgb(var(--bronze));
+    font-style: italic;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.relic-completion {
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.relic-progress {
+    width: 100%;
+    height: 3px;
+    background: var(--track-empty);
+    margin-top: 6px;
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.relic-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, rgb(var(--bronze)), rgb(var(--gold)));
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px rgba(var(--gold), 0.5);
+}
+
+/* Relic Badge States */
+.relic-badge.not-started {
+    opacity: 0.5;
+}
+
+.relic-badge.not-started:hover {
+    opacity: 0.7;
+}
+
+.relic-badge.in-progress {
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.8), rgba(var(--surface-2), 0.9));
+    border-color: rgba(var(--bronze), 0.5);
+    color: rgb(var(--text-body));
+}
+
+.relic-badge.in-progress .relic-progress-bar {
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)));
+    box-shadow: 0 0 12px rgba(var(--gold), 0.7);
+}
+
+.relic-badge.in-progress:hover {
+    background: linear-gradient(135deg, rgba(var(--surface-hover-1), 0.9), rgba(var(--surface-hover-2), 1));
+    border-color: rgba(var(--gold), 0.6);
+    color: rgb(var(--gold-light));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(var(--gold), 0.2);
+}
+
+.relic-badge.complete {
+    background: linear-gradient(135deg, rgba(var(--gold), 0.2), rgba(var(--bronze), 0.3));
+    border-color: rgb(var(--gold));
+    color: rgb(var(--gold-light));
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(var(--gold), 0.3);
+}
+
+.relic-badge.complete .relic-name {
+    color: rgb(var(--gold-light));
+}
+
+.relic-badge.complete .relic-stage {
+    color: rgb(var(--gold));
+}
+
+.relic-badge.complete .relic-completion {
+    color: rgb(var(--gold-light));
+    text-shadow: 0 0 10px rgba(var(--gold), 0.5);
+}
+
+.relic-badge.complete .relic-progress-bar {
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)), rgb(var(--gold)));
+    box-shadow: 0 0 20px rgba(var(--gold), 0.8);
+    animation: shimmer 2s infinite;
+}
+
+.relic-badge.complete:hover {
+    background: linear-gradient(135deg, rgba(var(--gold), 0.3), rgba(var(--bronze), 0.4));
+    border-color: rgb(var(--gold-light));
+    transform: translateY(-2px);
+    box-shadow:
+        0 4px 8px rgba(var(--gold), 0.3),
+        0 0 25px rgba(var(--gold), 0.5);
+}
+
+@keyframes shimmer {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Achievement Progress Badges (Main Scenario, Raid Clears, Mapping the Realm) */
+.progress-badge {
+    margin-top: 15px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.5), rgba(var(--surface-2), 0.2));
+    border: 1px solid rgba(var(--bronze), 0.2);
+    border-left: 3px solid rgba(var(--gold), 0.4);
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.progress-header {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 8px;
+}
+
+.progress-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: rgb(var(--gold));
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.progress-bar-track {
+    width: 100%;
+    height: 6px;
+    background: var(--track-empty);
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgb(var(--bronze)), rgb(var(--gold)));
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px rgba(var(--gold), 0.5);
+}
+
+.progress-badge.complete {
+    background: linear-gradient(135deg, rgba(var(--gold), 0.2), rgba(var(--bronze), 0.3));
+    border-color: rgb(var(--gold));
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(var(--gold), 0.3);
+}
+
+.progress-badge.complete .progress-title {
+    color: rgb(var(--gold-light));
+    text-shadow: 0 0 10px rgba(var(--gold), 0.5);
+}
+
+.progress-badge.complete .progress-bar-fill {
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)), rgb(var(--gold)));
+    box-shadow: 0 0 20px rgba(var(--gold), 0.8);
+    animation: shimmer 2s infinite;
+}
+
+/* MSQ Patch-Segmented Bar */
+.msq-expansion-labels {
+    display: flex;
+    margin-bottom: 4px;
+}
+
+.msq-expansion-label {
+    flex-basis: 0;
+    min-width: 0;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    color: rgb(var(--bronze));
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 2px;
+}
+
+.msq-patch-bar {
+    display: flex;
+    width: 100%;
+    height: 8px;
+}
+
+.msq-expansion-group {
+    display: flex;
+    flex-basis: 0;
+    gap: 2px;
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 1px solid rgba(var(--gold), 0.4);
+}
+
+.msq-expansion-group:last-child {
+    padding-right: 0;
+    margin-right: 0;
+    border-right: none;
+}
+
+.msq-patch-segment {
+    flex-basis: 0;
+    min-width: 2px;
+    height: 100%;
+    background: var(--track-empty);
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+}
+
+.msq-patch-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgb(var(--bronze)), rgb(var(--gold)));
+}
+
+.msq-patch-segment.upcoming {
+    opacity: 0.4;
+}
+
+.msq-patch-segment.complete .msq-patch-fill {
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)));
+    box-shadow: 0 0 6px rgba(var(--gold), 0.6);
+}
+
+.msq-patch-segment.current {
+    animation: msq-pulse 1.5s ease-in-out infinite;
+}
+
+.msq-patch-segment.current .msq-patch-fill {
+    background: linear-gradient(90deg, rgb(var(--gold)), rgb(var(--gold-light)));
+    box-shadow: 0 0 6px rgba(var(--gold-light), 0.9);
+}
+
+@keyframes msq-pulse {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Social Links Section */
+.social-links {
+    text-align: center;
+    padding: 60px 40px;
+    margin: 80px auto 60px;
+    max-width: 800px;
+    background: linear-gradient(135deg, rgb(var(--card-1)) 0%, rgb(var(--card-2)) 100%);
+    border: 3px solid rgb(var(--card-border));
+    border-image: linear-gradient(135deg, rgb(var(--gold)), rgb(var(--bronze)), rgb(var(--gold))) 1;
+    position: relative;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(var(--gold), 0.1);
+}
+
+.social-links::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border: 1px solid rgba(var(--gold), 0.15);
+    pointer-events: none;
+}
+
+.social-links h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: rgb(var(--gold-light));
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, rgba(var(--surface-1), 0.8), rgba(var(--surface-2), 0.9));
+    border: 2px solid rgba(var(--gold), 0.5);
+    color: rgb(var(--text-body));
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border: 1px solid rgba(var(--gold), 0.2);
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+
+.social-link:hover {
+    background: linear-gradient(135deg, rgba(var(--gold), 0.2), rgba(var(--bronze), 0.3));
+    border-color: rgb(var(--gold-light));
+    color: rgb(var(--gold-light));
+    transform: translateY(-4px);
+    box-shadow:
+        0 8px 24px rgba(var(--gold), 0.3),
+        0 0 30px rgba(var(--gold), 0.2);
+}
+
+.social-link:hover::before {
+    border-color: rgba(var(--gold-light), 0.4);
+}
+
+.social-link svg {
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 60px;
+    border-top: 2px solid rgba(var(--gold), 0.2);
+    color: rgb(var(--bronze));
+    font-size: 0.9rem;
+}
+
+footer p {
+    margin-bottom: 8px;
+}
+
+footer .trademark {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+footer .attribution {
+    margin-top: 20px;
+    font-size: 0.8rem;
+}
+
+footer a {
+    color: rgb(var(--gold));
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: rgb(var(--gold-light));
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+
+/* Large screens */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 2000px;
+    }
+
+    .characters-grid {
+        max-width: 2000px;
+    }
+
+    .character-image {
+        width: 500px;
+        min-width: 500px;
+    }
+
+    .job-categories {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .job-category {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 1024px) {
+    .character-image {
+        width: 350px;
+        min-width: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5rem;
+    }
+
+    .characters-grid {
+        gap: 30px;
+    }
+
+    .character-card,
+    .character-card.reverse {
+        border-width: 2px;
+        flex-direction: column;
+    }
+
+    .character-image {
+        width: 100%;
+        min-width: 100%;
+        height: 550px;
+        border-right: none;
+        border-left: none;
+        border-bottom: 2px solid rgba(var(--gold), 0.3);
+    }
+
+    .character-info {
+        padding: 25px;
+    }
+
+    .social-links {
+        padding: 40px 20px;
+        margin: 60px auto 40px;
+    }
+
+    .social-links h2 {
+        font-size: 1.6rem;
+    }
+
+    .links {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .social-link {
+        width: 240px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 15px;
+    }
+
+    header {
+        padding: 40px 0 30px;
+        margin-bottom: 30px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+        letter-spacing: 2px;
+    }
+
+    header h1::before,
+    header h1::after {
+        margin: 0 10px;
+    }
+
+    .theme-toggle {
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+        top: 0;
+    }
+
+    .character-image {
+        height: 500px;
+    }
+
+    .character-name {
+        font-size: 1.6rem;
+    }
+
+    .character-info {
+        padding: 20px;
+    }
+
+    .job-category {
+        padding: 10px;
+    }
+
+    .achievement-badge {
+        top: 15px;
+        right: 15px;
+    }
+
+    .achievement-total {
+        font-size: 1.2rem;
+        padding: 10px 14px;
+    }
+
+    .achievement-total::before {
+        font-size: 1rem;
+        margin-right: 6px;
+    }
+
+    .achievement-hover {
+        padding: 12px 16px;
+        min-width: 180px;
+    }
+
+    .achievement-hover .achievement-value {
+        font-size: 1.2rem;
+    }
+
+    .achievement-hover .achievement-desc {
+        font-size: 0.6rem;
+    }
+
+    .achievement-hover .achievement-updated {
+        font-size: 0.55rem;
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+
+    .last-updated {
+        font-size: 0.65rem;
+        margin-top: 20px;
+        padding-top: 12px;
+    }
+}
