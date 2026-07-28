@@ -25,15 +25,15 @@ const MAX_LEVELS = {
   'Phantom Thief': 6,
   'Phantom Ranger': 6,
   'Phantom Cannoneer': 6,
-  'Phantom Freelancer': 16,
-  'Phantom Ninja': 4, // Not yet known
-  'Phantom White Mage': 4, // Not yet known
-  'Phantom Black Mage': 4, // Not yet known
-  'Phantom Dragoon': 4, // Not yet known
-  'Phantom Summoner': 4, // Not yet known
-  'Phantom Blue Mage': 4, // Not yet known
-  'Phantom Red Mage': 4, // Not yet known
-  'Phantom Necromancer': 4 // Not yet known
+  'Phantom Freelancer': 24,
+  'Phantom Ninja': 6,
+  'Phantom White Mage': 5,
+  'Phantom Black Mage': 5,
+  'Phantom Dragoon': 4,
+  'Phantom Summoner': 5,
+  'Phantom Blue Mage': 3,
+  'Phantom Red Mage': 6,
+  'Phantom Necromancer': 5 
 };
 
 // Get max level for a job (defaults to 100)
