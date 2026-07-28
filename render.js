@@ -26,6 +26,14 @@ const MAX_LEVELS = {
   'Phantom Ranger': 6,
   'Phantom Cannoneer': 6,
   'Phantom Freelancer': 16,
+  'Phantom Ninja': 4, // Not yet known
+  'Phantom White Mage': 4, // Not yet known
+  'Phantom Black Mage': 4, // Not yet known
+  'Phantom Dragoon': 4, // Not yet known
+  'Phantom Summoner': 4, // Not yet known
+  'Phantom Blue Mage': 4, // Not yet known
+  'Phantom Red Mage': 4, // Not yet known
+  'Phantom Necromancer': 4 // Not yet known
 };
 
 // Get max level for a job (defaults to 100)
@@ -79,7 +87,15 @@ const JOB_ROLES = {
     { name: 'Phantom Oracle', abbr: 'Oracle' },
     { name: 'Phantom Cannoneer', abbr: 'Cannoneer' },
     { name: 'Phantom Gladiator', abbr: 'Gladiator' },
-    { name: 'Phantom Freelancer', abbr: 'Freelancer' }
+    { name: 'Phantom Freelancer', abbr: 'Freelancer' },
+    { name: 'Phantom Ninja', abbr: 'Ninja' },
+    { name: 'Phantom White Mage', abbr: 'White Mage' },
+    { name: 'Phantom Black Mage', abbr: 'Black Mage' },
+    { name: 'Phantom Dragoon', abbr: 'Dragoon' },
+    { name: 'Phantom Summoner', abbr: 'Summoner' },
+    { name: 'Phantom Blue Mage', abbr: 'Blue Mage' },
+    { name: 'Phantom Red Mage', abbr: 'Red Mage' },
+    { name: 'Phantom Necromancer', abbr: 'Necromancer' }
   ],
   crafters: [
     { name: 'Carpenter', abbr: 'CRP' },
