@@ -609,7 +609,7 @@ export default characterData;
 updateAllCharacters().catch(error => {
   if (error instanceof MaintenanceError) {
     console.error(`\n${error.message}\nAborting without writing data.js so existing data is left untouched.`);
-    process.exit(1);
+    process.exit(2);
   }
   console.error(error);
   process.exit(1);

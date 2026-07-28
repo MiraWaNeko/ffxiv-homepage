@@ -47,7 +47,16 @@ jobs:
           git checkout gh-pages -- data.js || true
 
       - name: Fetch character data
-        run: pnpm run update
+        run: |
+          set +e
+          pnpm run update
+          code=$?
+          set -e
+          if [ $code -eq 2 ]; then
+            echo "::notice title=Lodestone Maintenance::Lodestone appears to be under maintenance (HTTP 503). Skipping this run."
+            exit 0
+          fi
+          exit $code
 
       - name: Prepare deployment directory
         run: |
