@@ -22817,6 +22817,12 @@
     "kind": "Quests",
     "category": "Seasonal Events"
   },
+  "3875": {
+    "name": "Thankful Thirteen",
+    "points": 10,
+    "kind": "Quests",
+    "category": "Seasonal Events"
+  },
   "3876": {
     "name": "Gold Magnet",
     "points": 20,
@@ -23177,8 +23183,32 @@
     "kind": "Quests",
     "category": "General"
   },
+  "3937": {
+    "name": "Universally Crescentialed",
+    "points": 10,
+    "kind": "Quests",
+    "category": "General"
+  },
+  "3938": {
+    "name": "A Knife to Remember",
+    "points": 10,
+    "kind": "Quests",
+    "category": "General"
+  },
+  "3939": {
+    "name": "A Beautiful Day in the Neighborhood",
+    "points": 20,
+    "kind": "Quests",
+    "category": "Allied Society Quests"
+  },
   "3940": {
     "name": "On the Other Side",
+    "points": 10,
+    "kind": "Quests",
+    "category": "General"
+  },
+  "3941": {
+    "name": "Gently Does It",
     "points": 10,
     "kind": "Quests",
     "category": "General"
@@ -23196,16 +23226,142 @@
     "category": "General"
   },
   "3945": {
-    "name": "トモダチドコダ",
+    "name": "Dire, Dire Deepcroft",
     "points": 10,
     "kind": "Quests",
     "category": "Seasonal Events"
   },
   "3946": {
-    "name": "祝祭告げる鐘の音",
+    "name": "Are You Listening?",
     "points": 10,
     "kind": "Quests",
     "category": "Seasonal Events"
+  },
+  "3949": {
+    "name": "Cut Above the Rest: Sword & Shield Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3950": {
+    "name": "Cut Above the Rest: War Hammer Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3951": {
+    "name": "Cut Above the Rest: Guillotine Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3952": {
+    "name": "Cut Above the Rest: Gunblade Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3953": {
+    "name": "Cut Above the Rest: Spear Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3954": {
+    "name": "Cut Above the Rest: Tonfa Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3955": {
+    "name": "Cut Above the Rest: Knives Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3956": {
+    "name": "Cut Above the Rest: Twinfangs Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3957": {
+    "name": "Cut Above the Rest: Blade Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3958": {
+    "name": "Cut Above the Rest: War Scythe Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3959": {
+    "name": "Cut Above the Rest: Harp Bow Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3960": {
+    "name": "Cut Above the Rest: Revolver Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3961": {
+    "name": "Cut Above the Rest: Fans Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3962": {
+    "name": "Cut Above the Rest: Staff Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3963": {
+    "name": "Cut Above the Rest: Index Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3964": {
+    "name": "Cut Above the Rest: Degen Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3965": {
+    "name": "Cut Above the Rest: Round Brush Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3966": {
+    "name": "Cut Above the Rest: Cane Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3967": {
+    "name": "Cut Above the Rest: Codex Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3968": {
+    "name": "Cut Above the Rest: Star Globe Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
+  },
+  "3969": {
+    "name": "Cut Above the Rest: Pendulums Occultum",
+    "points": 10,
+    "kind": "Items",
+    "category": "Phantom Weapons"
   },
   "3970": {
     "name": "Denizens of Nowhere",
@@ -23291,6 +23447,18 @@
     "kind": "Crafting & Gathering",
     "category": "Fisher"
   },
+  "3984": {
+    "name": "Go Big on the Trail III",
+    "points": 10,
+    "kind": "Crafting & Gathering",
+    "category": "Fisher"
+  },
+  "3985": {
+    "name": "I Came, I Saw, I Fished",
+    "points": 20,
+    "kind": "Crafting & Gathering",
+    "category": "Fisher"
+  },
   "3986": {
     "name": "Satisfaction Guaranteed: Aunt Tii's Tacos I",
     "points": 5,
@@ -23357,6 +23525,138 @@
     "kind": "Items",
     "category": "Collectables"
   },
+  "3997": {
+    "name": "Archiving the Arcane",
+    "points": 10,
+    "kind": "Exploration",
+    "category": "Duty"
+  },
+  "3998": {
+    "name": "Critical Analysis I",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "3999": {
+    "name": "Critical Analysis II",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4000": {
+    "name": "Critical Analysis III",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4001": {
+    "name": "Critical Analysis IV",
+    "points": 20,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4002": {
+    "name": "Occult Enlightenment I",
+    "points": 5,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4003": {
+    "name": "Occult Enlightenment II",
+    "points": 5,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4004": {
+    "name": "Occult Enlightenment III",
+    "points": 5,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4005": {
+    "name": "Occult Enlightenment IV",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4006": {
+    "name": "A Show of Fork I",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4007": {
+    "name": "A Show of Fork II",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4008": {
+    "name": "A Show of Fork III",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4009": {
+    "name": "A Show of Fork IV",
+    "points": 20,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4010": {
+    "name": "Tour de Fork I",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4011": {
+    "name": "Tour de Fork II",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4012": {
+    "name": "Tour de Fork III",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4013": {
+    "name": "Tour de Fork IV",
+    "points": 20,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4014": {
+    "name": "Phantom Physicking I",
+    "points": 5,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4015": {
+    "name": "Phantom Physicking II",
+    "points": 5,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4016": {
+    "name": "Phantom Physicking III",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4017": {
+    "name": "Phantomastery IV",
+    "points": 5,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
+  "4018": {
+    "name": "Phantomastery V",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
   "4019": {
     "name": "Shades' Treasury",
     "points": 20,
@@ -23375,10 +23675,22 @@
     "kind": "Battle",
     "category": "Field Operations"
   },
+  "4022": {
+    "name": "Fifth Astral Blues",
+    "points": 10,
+    "kind": "Battle",
+    "category": "Field Operations"
+  },
   "4069": {
     "name": "Son of a...",
     "points": 10,
     "kind": "Battle",
     "category": "Raids"
+  },
+  "4074": {
+    "name": "Mapping the Realm: The Occult Crescent: North Horn",
+    "points": 10,
+    "kind": "Exploration",
+    "category": "Duty"
   }
 }
