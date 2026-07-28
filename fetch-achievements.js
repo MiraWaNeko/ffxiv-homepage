@@ -2,6 +2,18 @@ import fetch from 'node-fetch';
 import * as cheerio from 'cheerio';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 
+// Thrown when Lodestone itself responds with 503, which is how it signals
+// scheduled maintenance. Callers should let this abort the whole run rather
+// than treating it like a normal per-page/per-character fetch failure —
+// otherwise maintenance windows silently turn into "no data found" and wipe
+// out previously-good results.
+class MaintenanceError extends Error {
+  constructor(url) {
+    super(`Lodestone appears to be under maintenance (HTTP 503) while fetching ${url}`);
+    this.name = 'MaintenanceError';
+  }
+}
+
 // Cache file for achievement IDs
 const CACHE_FILE = 'achievements-cache.json';
 const TIME_LIMITED_FILE = 'time-limited-achievements.json';
@@ -130,6 +142,10 @@ async function fetchAchievementPage(characterId, page, region = 'na') {
     }
   });
 
+  if (response.status === 503) {
+    throw new MaintenanceError(url);
+  }
+
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -228,6 +244,7 @@ async function fetchNewAchievements(characterId, region = 'na') {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
     } catch (error) {
+      if (error instanceof MaintenanceError) throw error;
       console.error(`Error fetching page ${page}:`, error.message);
       break;
     }
@@ -267,4 +284,4 @@ async function fetchNewAchievements(characterId, region = 'na') {
   };
 }
 
-export { fetchNewAchievements, loadCache, calculateBaseScore, getMappingTheRealmIds, getRaidAchievementIds };
+export { fetchNewAchievements, loadCache, calculateBaseScore, getMappingTheRealmIds, getRaidAchievementIds, MaintenanceError };

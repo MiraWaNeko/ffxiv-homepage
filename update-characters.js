@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
 
 import CONFIG from './config.js';
-import { fetchNewAchievements, loadCache, getMappingTheRealmIds, getRaidAchievementIds } from './fetch-achievements.js';
+import { fetchNewAchievements, loadCache, getMappingTheRealmIds, getRaidAchievementIds, MaintenanceError } from './fetch-achievements.js';
 import { RELIC_WEAPONS, RELIC_TOOLS, checkRelicStageCompletion, getHighestStage, getBiggestStage } from './relic-definitions.js';
 import { MSQ_ACHIEVEMENT_PATCHES, groupAchievementsByPatch, getSuppressedMSQIds } from './patch-definitions.js';
 
@@ -20,6 +20,10 @@ async function fetchCharacterData(characterId, existingData = null) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
       }
     });
+
+    if (response.status === 503) {
+      throw new MaintenanceError(url);
+    }
 
     if (!response.ok) {
       throw new Error(`[CHARACTER] HTTP error! status: ${response.status}`);
@@ -59,6 +63,7 @@ async function fetchCharacterData(characterId, existingData = null) {
       achievements: await fetchAchievementData(characterData)
     };
   } catch (error) {
+    if (error instanceof MaintenanceError) throw error;
     console.error(`[CHARACTER] Error fetching character ${existingData ? `${existingData.name} (${existingData.world})` : characterId}:`, error);
     return null;
   }
@@ -73,6 +78,10 @@ async function fetchCharacterJobs(characterData) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
       }
     });
+
+    if (response.status === 503) {
+      throw new MaintenanceError(url);
+    }
 
     if (!response.ok) {
       throw new Error(`[JOBS] HTTP error! status: ${response.status}`);
@@ -193,6 +202,7 @@ async function fetchCharacterJobs(characterData) {
 
     return jobs;
   } catch (error) {
+    if (error instanceof MaintenanceError) throw error;
     console.error(`[JOBS] Error fetching jobs for character ${characterData.name} (${characterData.world}):`, error);
     return null;
   }
@@ -443,6 +453,7 @@ async function fetchAchievementData(characterData) {
     console.log(`[ACHIEVEMENTS] No achievement data found`);
     return null;
   } catch (error) {
+    if (error instanceof MaintenanceError) throw error;
     console.error(`[ACHIEVEMENTS] Error fetching achievements:`, error);
     return null;
   }
@@ -595,4 +606,11 @@ export default characterData;
   console.log('Character data updated successfully!');
 }
 
-updateAllCharacters().catch(console.error);
+updateAllCharacters().catch(error => {
+  if (error instanceof MaintenanceError) {
+    console.error(`\n${error.message}\nAborting without writing data.js so existing data is left untouched.`);
+    process.exit(1);
+  }
+  console.error(error);
+  process.exit(1);
+});
