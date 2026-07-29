@@ -185,6 +185,16 @@ async function fetchCharacterJobs(characterData) {
       }
     });
 
+    // Occult Crescent Knowledge Level — rendered alongside the Phantom Jobs
+    // but isn't a job itself, so it's tracked separately from the arrays above.
+    jobs.knowledgeLevel = 0;
+    $('.character__job__list').each((i, elem) => {
+      const $elem = $(elem);
+      if ($elem.find('.character__job__name').text().trim() === 'Knowledge Level') {
+        jobs.knowledgeLevel = parseInt($elem.find('.character__job__level').text().trim(), 10) || 0;
+      }
+    });
+
     // Drop untouched classes/jobs (level 0/"-" on Lodestone) — the renderer
     // already falls back to level 0 for anything not in the stored list.
     jobs.combat = jobs.combat.filter(j => j.level > 0);

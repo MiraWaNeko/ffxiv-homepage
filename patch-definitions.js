@@ -1,11 +1,6 @@
-// Patch numbers for the Main Scenario Quest and Raid-clear achievements tracked
-// by analyzeAchievementSetProgress() in update-characters.js / fc-update.js.
-// Researched via FFXIVCollect's achievement API, cross-verified against
-// ffxiv.consolegameswiki.com achievement pages and (for one discrepancy)
-// Square Enix's own patch press release.
+// Patch numbers for the Main Scenario Quest and Raid-clear achievements tracked by analyzeAchievementSetProgress().
 
-// Compares patch strings like "2.4" vs "2.55" vs "3.01" in real release order
-// (each dot-separated part compared numerically, not lexicographically).
+// Compares patch strings like "2.4" vs "2.55" vs "3.01".
 function comparePatchVersions(a, b) {
   const partsA = a.split('.').map(Number);
   const partsB = b.split('.').map(Number);
@@ -42,11 +37,7 @@ export const MSQ_EXPANSIONS = {
   7: { name: 'Dawntrail', abbr: 'DT' }
 };
 
-// Achievement groups where only ONE member is ever obtainable on a given
-// character, permanently — e.g. the starting-city intro quest, which locks
-// in at character creation. Without this, a character's total would be
-// inflated by achievements they can never earn, leaving that patch stuck
-// below 100% forever.
+// Achievement groups where only ONE member is ever obtainable on a given character
 export const MSQ_EXCLUSIVE_GROUPS = [
   [310, 311, 312] // Leaving Limsa Lominsa / Gone from Gridania / Out of Ul'dah
 ];

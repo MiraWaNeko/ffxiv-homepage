@@ -3,6 +3,8 @@
 // ============================================================================
 // This is the main configuration file for your FFXIV character homepage.
 // When forking this repository, this is the primary file you need to customize.
+//
+// Copy this file to config.js and fill in your own values.
 // ============================================================================
 
 const CONFIG = {
@@ -11,7 +13,7 @@ const CONFIG = {
   // ==========================================================================
   site: {
     // The title shown in the browser tab
-    title: 'Mira wa Neko - FFXIV Characters',
+    title: 'Your Name - FFXIV Characters',
 
     // The main header displayed on the page
     header: 'FFXIV Characters',
@@ -24,7 +26,7 @@ const CONFIG = {
   // Example: https://na.finalfantasyxiv.com/lodestone/character/24921505/
   //          The character ID is: 24921505
   // ==========================================================================
-  characters: ['24921505', '24387385', '61617093'], // Add more character IDs as needed
+  characters: ['24921505'], // Add more character IDs as needed
 
   // ==========================================================================
   // LODESTONE SETTINGS
@@ -42,17 +44,16 @@ const CONFIG = {
   // Supported platforms: twitter, bluesky, youtube, twitch, tiktok
   // ==========================================================================
   socialLinks: [
-    {
-      platform: 'twitter',
-      url: 'https://twitter.com/mirawaneko_ffxiv',
-      label: 'Twitter'
-    },
-    {
-      platform: 'bluesky',
-      url: 'https://bsky.app/profile/ffxiv.mirawaneko.net',
-      label: 'Bluesky'
-    }
-    // Examples of other supported platforms:
+    // {
+    //   platform: 'twitter',
+    //   url: 'https://twitter.com/your-username',
+    //   label: 'Twitter'
+    // },
+    // {
+    //   platform: 'bluesky',
+    //   url: 'https://bsky.app/profile/your-handle',
+    //   label: 'Bluesky'
+    // },
     // {
     //   platform: 'youtube',
     //   url: 'https://youtube.com/@your-channel',
@@ -112,7 +113,7 @@ const CONFIG = {
   deployment: {
     // Custom domain for GitHub Pages (set to null if not using a custom domain)
     // This will be used to create the CNAME file during deployment
-    customDomain: 'ffxiv.mirawaneko.net',
+    customDomain: null,
   },
 };
 

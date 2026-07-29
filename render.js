@@ -33,7 +33,7 @@ const MAX_LEVELS = {
   'Phantom Summoner': 5,
   'Phantom Blue Mage': 3,
   'Phantom Red Mage': 6,
-  'Phantom Necromancer': 5 
+  'Phantom Necromancer': 5
 };
 
 // Get max level for a job (defaults to 100)
@@ -148,6 +148,10 @@ function getJobLevel(jobs, jobName) {
 
 function renderJobBadge(jobAbbr, level, maxLevel) {
   if (level === 0) {
+    if (CONFIG.display?.hideNotUnlockedJobs) {
+      return '';
+    }
+
     // Unlocked job with no level
     return `<span class="job-badge">
       <span class="job-abbr">${jobAbbr}</span>
@@ -183,14 +187,14 @@ function renderRelicBadge(relicData, type = 'weapon') {
 
   const progressBars = `<div class="relic-progress-bars">
     ${relicData.stages.map(stage => {
-      const stagePercentage = stage.total > 0 ? Math.round((stage.completed / stage.total) * 100) : 0;
-      return `
+    const stagePercentage = stage.total > 0 ? Math.round((stage.completed / stage.total) * 100) : 0;
+    return `
         <div class="relic-progress-bar-container" title="${stage.name}">
           <div class="relic-progress"><div class="relic-progress-bar" style="width: ${stagePercentage}%"></div></div>
           <div class="relic-progress-bar-label">${stage.name}</div>
         </div>
       `;
-    }).join('')}
+  }).join('')}
   </div>`;
 
   return `
@@ -253,14 +257,14 @@ function renderMSQProgressBar(msq) {
 
   const labelsHTML = expansionGroups.map(g => {
     const expansion = MSQ_EXPANSIONS[g.major];
-    return `<span class="msq-expansion-label" style="flex-grow: ${g.total}" title="${expansion?.name || g.major}">${expansion?.abbr || g.major}</span>`;
+    return `<span class="msq-expansion-label" style="flex-grow: ${g.total}" data-tooltip="${expansion?.name || g.major}">${expansion?.abbr || g.major}</span>`;
   }).join('');
 
   const groupsHTML = expansionGroups.map(g => {
     const segmentsHTML = g.patches.map(p => {
       const stateClass = p.percentage === 100 ? 'complete' : p.isCurrent ? 'current' : 'upcoming';
       return `
-        <div class="msq-patch-segment ${stateClass}" style="flex-grow: ${p.total}" title="Patch ${p.patch}">
+        <div class="msq-patch-segment ${stateClass}" style="flex-grow: ${p.total}" data-tooltip="Patch ${p.patch}">
           <div class="msq-patch-fill" style="width: ${p.percentage}%"></div>
         </div>
       `;
@@ -296,12 +300,13 @@ function renderRelicSection(relics) {
   let relicsHTML = '<div class="relic-section">';
 
   // Render weapon relics
-  if (weaponEntries.length > 0) {
+  if (weaponEntries.length > 0 && (!CONFIG.display?.hideEmptyRelics || weaponEntries.some(([_, data]) => data.percentage > 0))) {
     relicsHTML += '<div class="relic-category">';
     relicsHTML += '<div class="relic-category-title">Relic Weapons</div>';
     relicsHTML += '<div class="relic-list">';
 
     for (const [key, data] of weaponEntries) {
+      if (CONFIG.display?.hideEmptyRelics && data.percentage === 0) continue;
       relicsHTML += renderRelicBadge(data, 'weapon');
     }
 
@@ -309,12 +314,13 @@ function renderRelicSection(relics) {
   }
 
   // Render tool relics
-  if (toolEntries.length > 0) {
+  if (toolEntries.length > 0 && (!CONFIG.display?.hideEmptyRelics || toolEntries.some(([_, data]) => data.percentage > 0))) {
     relicsHTML += '<div class="relic-category">';
     relicsHTML += '<div class="relic-category-title">Relic Tools</div>';
     relicsHTML += '<div class="relic-list">';
 
     for (const [key, data] of toolEntries) {
+      if (CONFIG.display?.hideEmptyRelics && data.percentage === 0) continue;
       relicsHTML += renderRelicBadge(data, 'tool');
     }
 
@@ -355,89 +361,156 @@ function renderCharacterCard(character, index) {
 
   let jobCategoriesHTML = '';
 
-  // Tanks
-  jobCategoriesHTML += `
-    <div class="job-category">
-      <div class="job-category-title">Tanks</div>
-      <div class="job-list">
-        ${JOB_ROLES.tanks.map(job => {
-          const { abbr, level } = getJobDisplay(allJobs, job.name, job.abbr);
-          const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(abbr, level, maxLevel);
-        }).join('')}
-      </div>
-    </div>
-  `;
+  const tanksRender = JOB_ROLES.tanks.map(job => {
+    const { abbr, level } = getJobDisplay(allJobs, job.name, job.abbr);
+    const maxLevel = getMaxLevel(job.name);
+    return renderJobBadge(abbr, level, maxLevel);
+  }).join('');
+  const hasTanks = tanksRender.trim() !== '';
 
-  // Healers
-  jobCategoriesHTML += `
-    <div class="job-category">
-      <div class="job-category-title">Healers</div>
-      <div class="job-list">
-        ${JOB_ROLES.healers.map(job => {
-          const { abbr, level } = getJobDisplay(allJobs, job.name, job.abbr);
-          const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(abbr, level, maxLevel);
-        }).join('')}
-      </div>
-    </div>
-  `;
+  const healersRender = JOB_ROLES.healers.map(job => {
+    const { abbr, level } = getJobDisplay(allJobs, job.name, job.abbr);
+    const maxLevel = getMaxLevel(job.name);
+    return renderJobBadge(abbr, level, maxLevel);
+  }).join('');
+  const hasHealers = healersRender.trim() !== '';
 
-  // DPS
-  jobCategoriesHTML += `
-    <div class="job-category">
-      <div class="job-category-title">DPS</div>
-      <div class="job-list">
-        ${JOB_ROLES.dps.map(job => {
-          const { abbr, level } = getJobDisplay(allJobs, job.name, job.abbr);
-          const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(abbr, level, maxLevel);
-        }).join('')}
-      </div>
-    </div>
-  `;
+  const dpsRender = JOB_ROLES.dps.map(job => {
+    const { abbr, level } = getJobDisplay(allJobs, job.name, job.abbr);
+    const maxLevel = getMaxLevel(job.name);
+    return renderJobBadge(abbr, level, maxLevel);
+  }).join('');
+  const hasDPS = dpsRender.trim() !== '';
 
-  // Phantom Jobs
-  jobCategoriesHTML += `
-    <div class="job-category">
-      <div class="job-category-title">Phantom Jobs</div>
-      <div class="job-list">
-        ${JOB_ROLES.phantom.map(job => {
-          const level = getJobLevel(allJobs, job.name);
-          const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(job.abbr, level, maxLevel);
-        }).join('')}
+  // Tanks / Healers / DPS
+  if (CONFIG.display?.combineTanksHealersDPS) {
+    jobCategoriesHTML += `
+      <div class="job-category">
+        <div class="job-category-title">${CONFIG.display?.useDisciplesTitles ? 'Disciples of War and Magic' : 'Combat Jobs'}</div>
+        ${!hasTanks ? '' : `
+        <div class="job-list ${hasHealers || hasDPS ? 'job-list-divider' : ''}">
+          ${tanksRender}
+        </div>
+        `}
+        ${!hasHealers ? '' : `
+        <div class="job-list ${hasDPS ? 'job-list-divider' : ''}">
+          ${healersRender}
+        </div>
+        `}
+        ${!hasDPS ? '' : `
+        <div class="job-list">
+          ${dpsRender}
+        </div>
+        `}
       </div>
-    </div>
-  `;
+    `;
+  } else {
+    if (hasTanks) {
+      jobCategoriesHTML += `
+        <div class="job-category">
+          <div class="job-category-title">Tanks</div>
+          <div class="job-list">
+            ${tanksRender}
+          </div>
+        </div>
+      `;
+    }
 
-  // Crafters
-  jobCategoriesHTML += `
-    <div class="job-category">
-      <div class="job-category-title">Crafters</div>
-      <div class="job-list">
-        ${JOB_ROLES.crafters.map(job => {
-          const level = getJobLevel(allJobs, job.name);
-          const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(job.abbr, level, maxLevel);
-        }).join('')}
-      </div>
-    </div>
-  `;
+    if (hasHealers) {
+      jobCategoriesHTML += `
+        <div class="job-category">
+          <div class="job-category-title">Healers</div>
+          <div class="job-list">
+            ${healersRender}
+          </div>
+        </div>
+      `;
+    }
 
-  // Gatherers
-  jobCategoriesHTML += `
-    <div class="job-category">
-      <div class="job-category-title">Gatherers</div>
-      <div class="job-list">
-        ${JOB_ROLES.gatherers.map(job => {
-          const level = getJobLevel(allJobs, job.name);
-          const maxLevel = getMaxLevel(job.name);
-          return renderJobBadge(job.abbr, level, maxLevel);
-        }).join('')}
+    if (hasDPS) {
+      jobCategoriesHTML += `
+        <div class="job-category">
+          <div class="job-category-title">DPS</div>
+          <div class="job-list">
+            ${dpsRender}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  // Occult Crescent (Knowledge Level + Phantom Jobs)
+  const hasOccultProgress = (jobs.knowledgeLevel || 0) > 0 || (jobs.phantom || []).length > 0;
+  if (hasOccultProgress || !CONFIG.display?.hideEmptyOccultCrescent) {
+    jobCategoriesHTML += `
+      <div class="job-category">
+        <div class="job-category-title">Occult Crescent</div>
+        <div class="job-list job-list-divider">
+          ${renderJobBadge('Knowledge Level', jobs.knowledgeLevel || 0, 40)}
+        </div>
+        <div class="job-list">
+          ${JOB_ROLES.phantom.map(job => {
+      const level = getJobLevel(allJobs, job.name);
+      const maxLevel = getMaxLevel(job.name);
+      return renderJobBadge(job.abbr, level, maxLevel);
+    }).join('')}
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }
+
+  const craftersRender = JOB_ROLES.crafters.map(job => {
+    const level = getJobLevel(allJobs, job.name);
+    const maxLevel = getMaxLevel(job.name);
+    return renderJobBadge(job.abbr, level, maxLevel);
+  }).join('');
+  const hasCrafters = craftersRender.trim() !== '';
+
+  const gatherersRender = JOB_ROLES.gatherers.map(job => {
+    const level = getJobLevel(allJobs, job.name);
+    const maxLevel = getMaxLevel(job.name);
+    return renderJobBadge(job.abbr, level, maxLevel);
+  }).join('');
+  const hasGatherers = gatherersRender.trim() !== '';
+
+  if (hasCrafters || hasGatherers) {
+    // Crafters & Gatherers
+    if (CONFIG.display?.combineCraftersAndGatherers) {
+      jobCategoriesHTML += `
+      <div class="job-category">
+        <div class="job-category-title">${CONFIG.display?.useDisciplesTitles ? 'Disciples of the Hand and Land' : 'Crafters &amp; Gatherers'}</div>
+        ${!hasCrafters ? '' : `<div class="job-list ${hasCrafters ? 'job-list-divider' : ''}">
+          ${craftersRender}
+        </div>`}
+        ${!hasGatherers ? '' : `<div class="job-list">
+          ${gatherersRender}
+        </div>`}
+      </div>
+    `;
+    } else {
+      if (hasCrafters) {
+        jobCategoriesHTML += `
+      <div class="job-category">
+        <div class="job-category-title">${CONFIG.display?.useDisciplesTitles ? 'Disciples of the Hand' : 'Crafters'}</div>
+        <div class="job-list">
+          ${craftersRender}
+        </div>
+      </div>
+    `;
+      }
+
+      if (hasGatherers) {
+        jobCategoriesHTML += `
+      <div class="job-category">
+        <div class="job-category-title">${CONFIG.display?.useDisciplesTitles ? 'Disciples of the Land' : 'Gatherers'}</div>
+        <div class="job-list">
+          ${gatherersRender}
+        </div>
+      </div>
+    `;
+      }
+    }
+  }
 
   // Build HTML based on image position
   const imageHTML = `
@@ -483,10 +556,10 @@ function renderCharacterCard(character, index) {
   }
 
   // Render relic and achievement-set progress if we have data for them
-  const relicHTML = achievements && achievements.relics ? renderRelicSection(achievements.relics) : '';
-  const msqHTML = achievements ? renderMSQProgressBar(achievements.msq) : '';
+  const relicHTML = achievements && CONFIG.display?.showRelicProgress && achievements.relics ? renderRelicSection(achievements.relics) : '';
+  const msqHTML = achievements && CONFIG.display?.showMSQProgress ? renderMSQProgressBar(achievements.msq) : '';
   const raidsHTML = achievements ? renderProgressBadge('Raid Clears', achievements.raids) : '';
-  const explorationHTML = achievements ? renderProgressBadge('Mapping the Realm', achievements.exploration) : '';
+  const explorationHTML = achievements && CONFIG.display?.showExplorationProgress ? renderProgressBadge('Mapping the Realm', achievements.exploration) : '';
 
   const infoHTML = `
     <div class="character-info">
