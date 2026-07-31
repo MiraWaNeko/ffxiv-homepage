@@ -103,7 +103,7 @@ const CONFIG = {
     combineCraftersAndGatherers: true,
 
     // Hide jobs that are not unlocked for the character, instead of showing them empty.
-    hideNotUnlockedJobs: true,
+    hideNotUnlockedJobs: false,
   },
 
   // ==========================================================================
