@@ -64,6 +64,7 @@ const JOB_ROLES = {
     { name: 'Samurai', abbr: 'SAM' },
     { name: 'Reaper', abbr: 'RPR' },
     { name: 'Viper', abbr: 'VPR' },
+    { name: 'Beastmaster', abbr: 'BST' },
     { name: 'Bard', abbr: 'BRD' },
     { name: 'Machinist', abbr: 'MCH' },
     { name: 'Dancer', abbr: 'DNC' },
