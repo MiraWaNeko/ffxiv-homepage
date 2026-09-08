@@ -138,7 +138,8 @@ export const MSQ_ACHIEVEMENT_PATCHES = {
   3633: '7.2',
   3773: '7.3',
   3863: '7.4',
-  3942: '7.5'
+  3942: '7.5',
+  3943: '7.56'
 };
 
 export const RAID_ACHIEVEMENT_PATCHES = {
