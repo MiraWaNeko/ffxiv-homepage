@@ -23219,6 +23219,12 @@
     "kind": "Quests",
     "category": "Main Scenario"
   },
+  "3943": {
+    "name": "Onward and Upward",
+    "points": 20,
+    "kind": "Quests",
+    "category": "Main Scenario"
+  },
   "3944": {
     "name": "On the Wing",
     "points": 20,
@@ -23681,16 +23687,334 @@
     "kind": "Battle",
     "category": "Field Operations"
   },
+  "4023": {
+    "name": "Wild Child I",
+    "points": 5,
+    "kind": "Character",
+    "category": "Disciples of War"
+  },
+  "4024": {
+    "name": "Wild Child II",
+    "points": 5,
+    "kind": "Character",
+    "category": "Disciples of War"
+  },
+  "4025": {
+    "name": "Wild Child III",
+    "points": 5,
+    "kind": "Character",
+    "category": "Disciples of War"
+  },
+  "4026": {
+    "name": "Wild Child IV",
+    "points": 5,
+    "kind": "Character",
+    "category": "Disciples of War"
+  },
+  "4027": {
+    "name": "Wild Child V",
+    "points": 5,
+    "kind": "Character",
+    "category": "Disciples of War"
+  },
+  "4028": {
+    "name": "A Beast in the Hand I",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4029": {
+    "name": "A Beast in the Hand II",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4030": {
+    "name": "A Beast in the Hand III",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4031": {
+    "name": "A Beast in the Hand IV",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4032": {
+    "name": "A Beast in the Hand V",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4033": {
+    "name": "Crucible Checkmate I",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4034": {
+    "name": "Crucible Checkmate II",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4035": {
+    "name": "Crucible Checkmate III",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4036": {
+    "name": "Crucible Reforged I",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4037": {
+    "name": "Crucible Reforged II",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4038": {
+    "name": "Hot in Here I",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4039": {
+    "name": "Hot in Here II",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4040": {
+    "name": "Hot in Here III",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4041": {
+    "name": "Calcination I",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4042": {
+    "name": "Calcination II",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4043": {
+    "name": "Eighth Rank I",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4044": {
+    "name": "Unbreakable I",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4045": {
+    "name": "Eighth Rank II",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4046": {
+    "name": "Unbreakable II",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4047": {
+    "name": "Eighth Rank III",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4048": {
+    "name": "Unbreakable III",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4049": {
+    "name": "Built Different I",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4050": {
+    "name": "Legends Never Die I",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4051": {
+    "name": "Built Different II",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4052": {
+    "name": "Legends Never Die II",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4053": {
+    "name": "Freeing the Beast",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4054": {
+    "name": "Crucible Master",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4055": {
+    "name": "Unbroken Endgame",
+    "points": 20,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4056": {
+    "name": "Friend to the Fierce I",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4057": {
+    "name": "Friend to the Fierce II",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4058": {
+    "name": "Friend to the Fierce III",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4059": {
+    "name": "Friend to the Fierce IV",
+    "points": 5,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4060": {
+    "name": "Friend to the Fierce V",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4061": {
+    "name": "Beastkin Mate",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4062": {
+    "name": "Vilekin Mate",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4063": {
+    "name": "Cloudkin Mate",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4064": {
+    "name": "Seedkin Mate",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4065": {
+    "name": "Wavekin Mate",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4066": {
+    "name": "Scalekin Mate",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4067": {
+    "name": "Soulkin Mate",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4068": {
+    "name": "Ashkin Mate",
+    "points": 10,
+    "kind": "Battle",
+    "category": "General"
+  },
   "4069": {
     "name": "Son of a...",
     "points": 10,
     "kind": "Battle",
     "category": "Raids"
   },
+  "4070": {
+    "name": "Masterstroke I",
+    "points": 5,
+    "kind": "Character",
+    "category": "Gold Saucer"
+  },
+  "4071": {
+    "name": "Masterstroke II",
+    "points": 5,
+    "kind": "Character",
+    "category": "Gold Saucer"
+  },
+  "4072": {
+    "name": "Masterstroke III",
+    "points": 5,
+    "kind": "Character",
+    "category": "Gold Saucer"
+  },
+  "4073": {
+    "name": "Masterstroke IV",
+    "points": 10,
+    "kind": "Character",
+    "category": "Gold Saucer"
+  },
   "4074": {
     "name": "Mapping the Realm: The Occult Crescent: North Horn",
     "points": 10,
     "kind": "Exploration",
     "category": "Duty"
+  },
+  "4075": {
+    "name": "Beast of the Best",
+    "points": 20,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4076": {
+    "name": "Running Feral",
+    "points": 20,
+    "kind": "Battle",
+    "category": "General"
+  },
+  "4077": {
+    "name": "Crucible Contender",
+    "points": 20,
+    "kind": "Battle",
+    "category": "General"
   }
 }
