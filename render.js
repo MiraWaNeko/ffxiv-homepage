@@ -8,6 +8,8 @@ import { MSQ_EXPANSIONS } from './patch-definitions.js';
 const MAX_LEVELS = {
   // Blue Mage
   'Blue Mage': 80,
+  // Beastmaster
+  'Beastmaster': 50,
 
   // Phantom Jobs
   'Phantom Berserker': 3,
